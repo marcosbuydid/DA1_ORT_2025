@@ -1,8 +1,7 @@
 ﻿using DataAccess;
 using Domain;
-using Services;
 
-namespace Service.Tests;
+namespace Services.Tests;
 
 [TestClass]
 public class MovieServiceTests
