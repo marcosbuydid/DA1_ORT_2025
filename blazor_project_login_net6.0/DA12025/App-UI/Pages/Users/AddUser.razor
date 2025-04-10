@@ -1,0 +1,93 @@
+﻿@page "/add-user"
+@using Services
+@using Services.Models
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<h1>Add User</h1>
+
+@if (alertVisible)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>@alertMessage</strong>
+        <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+    </div>
+}
+
+<body>
+    <EditForm Model="@userDTO" OnValidSubmit="OnSubmit">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" @bind="userDTO.Name" />
+            <ValidationMessage For="@(() => userDTO.Name)" />
+        </div>
+        <div class="form-group">
+            <label for="lastname">LastName</label>
+            <input type="text" class="form-control" id="lastname" @bind="userDTO.LastName" />
+            <ValidationMessage For="@(() => userDTO.LastName)" />
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" @bind="userDTO.Email" />
+            <ValidationMessage For="@(() => userDTO.Email)" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" @bind="userDTO.Password" />
+            <ValidationMessage For="@(() => userDTO.Password)" />
+        </div>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <input type="text" class="form-control" id="role" @bind="userDTO.Role" />
+            <ValidationMessage For="@(() => userDTO.Role)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+    </EditForm>
+
+</body>
+
+@code {
+
+    private UserDTO userDTO;
+    private bool alertVisible = false;
+    private string alertMessage = "";
+
+    protected override void OnInitialized()
+    {
+        userDTO = new UserDTO();
+        userDTO.Name = "";
+        userDTO.LastName = "";
+        userDTO.Email = "";
+        userDTO.Password = "";
+        userDTO.Role = "";
+    }
+
+    private void OnSubmit()
+    {
+        try
+        {
+            UserService.AddUser(userDTO);
+            NavigationManager.NavigateTo("/users");
+        }
+        catch (ArgumentException e)
+        {
+            alertVisible = true;
+            alertMessage = e.Message;
+        }
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = !alertVisible;
+    }
+
+}
