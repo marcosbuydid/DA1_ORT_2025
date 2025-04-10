@@ -1,0 +1,49 @@
+﻿@page "/add-movie"
+@using Domain
+@using Services
+
+@inject MovieService MovieService
+@inject NavigationManager NavigationManager
+
+<h1>Add Movie</h1>
+
+<body>
+<EditForm Model="@movie" OnValidSubmit="OnSubmit">
+    <div class="form-group">
+        <label for="title">Títle</label>
+        <input type="text" class="form-control" id="title" @bind="movie.Title"/>
+    </div>
+    <div class="form-group">
+        <label for="director">Director</label>
+        <input type="text" class="form-control" id="director" @bind="movie.Director"/>
+    </div>
+    <div class="form-group">
+        <label for="releaseDate">Release Date</label>
+        <input type="date" id="releaseDate" name="movie-releaseDate" @bind="movie.ReleaseDate"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+</EditForm>
+</body>
+
+@code {
+    private Movie movie;
+    private bool alertVisible = false;
+    private string alertMessage = "";
+
+    protected override void OnInitialized()
+    {
+        movie = new Movie("", "", DateTime.Now);
+    }
+
+    private void OnSubmit()
+    {
+        MovieService.AddMovie(movie);
+        NavigationManager.NavigateTo("/movies");
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

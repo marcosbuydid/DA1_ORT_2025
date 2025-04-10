@@ -1,0 +1,62 @@
+﻿@page "/update-movie/{movieTitle}"
+
+@using Domain
+@using Services
+
+@inject MovieService MovieService
+@inject NavigationManager NavigationManager
+
+<h1>Update Movie</h1>
+
+<body>
+    <EditForm Model="@movie" OnValidSubmit="@(_ => OnUpdate(movie))">
+        <div class="form-group">
+            <label for="title">Títle</label>
+            <input type="text" class="form-control" id="title" @bind="movie.Title" disabled />
+        </div>
+        <div class="form-group">
+            <label for="director">Director</label>
+            <input type="text" class="form-control" id="director" @bind="movie.Director" />
+        </div>
+        <div class="form-group">
+            <label for="releaseDate">Release Date</label>
+            <input type="date" id="movie-releaseDate" name="movie-releaseDate" @bind="movie.ReleaseDate" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+    </EditForm>
+</body>
+
+
+@code {
+    [Parameter]
+    public string movieTitle { get; set; }
+
+    private Movie movie;
+
+    //used to store original values if cancel
+    //button is pressed.
+    private string director;
+    private DateTime releaseDate;
+
+    protected override void OnInitialized()
+    {
+        movie = MovieService.GetMovie(movieTitle);
+        director = movie.Director;
+        releaseDate = movie.ReleaseDate;
+    }
+
+    private void OnUpdate(Movie movie)
+    {
+        MovieService.UpdateMovie(movie);
+        NavigationManager.NavigateTo("/movies");
+    }
+
+    private void OnCancel()
+    {
+        movie.Director = director;
+        movie.ReleaseDate = releaseDate;
+
+        NavigationManager.NavigateTo("/movies");
+    }
+}
