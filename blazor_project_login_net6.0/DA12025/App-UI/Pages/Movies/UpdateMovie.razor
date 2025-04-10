@@ -1,0 +1,68 @@
+﻿@page "/update-movie/{movieTitle}"
+
+@using Services
+@using Services.Models
+
+@inject MovieService MovieService
+@inject NavigationManager NavigationManager
+
+
+<h1>Update Movie</h1>
+
+<body>
+    <EditForm Model="@movieDTO" OnValidSubmit="@(_ => OnUpdate(movieDTO))">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label for="title">Títle</label>
+            <input type="text" class="form-control" id="title" @bind="movieDTO.Title" disabled />
+            <ValidationMessage For="@(() => movieDTO.Title)" />
+        </div>
+        <div class="form-group">
+            <label for="director">Director</label>
+            <input type="text" class="form-control" id="director" @bind="movieDTO.Director" />
+            <ValidationMessage For="@(() => movieDTO.Director)" />
+        </div>
+        <div class="form-group">
+            <label for="releaseDate">Release Date</label>
+            <input type="date" id="movie-releaseDate" name="movie-releaseDate" @bind="movieDTO.ReleaseDate" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+    </EditForm>
+
+</body>
+
+
+@code {
+    [Parameter]
+    public string movieTitle { get; set; }
+
+    private MovieDTO movieDTO;
+
+    //used to store original values if cancel
+    //button is pressed.
+    //only used when data persistence is on memory
+    private string director;
+    private DateTime releaseDate;
+
+    protected override void OnInitialized()
+    {
+        movieDTO = MovieService.GetMovie(movieTitle);
+        director = movieDTO.Director;
+        releaseDate = movieDTO.ReleaseDate;
+    }
+
+    private void OnUpdate(MovieDTO movie)
+    {
+        MovieService.UpdateMovie(movie);
+        NavigationManager.NavigateTo("/movies");
+    }
+
+    private void OnCancel()
+    {
+        movieDTO.Director = director;
+        movieDTO.ReleaseDate = releaseDate;
+
+        NavigationManager.NavigateTo("/movies");
+    }
+}

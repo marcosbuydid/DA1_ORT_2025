@@ -1,0 +1,58 @@
+﻿@page "/users"
+@using Services
+@using Services.Models
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<h1>User List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button></td>
+                <td><button type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<UserDTO> users;
+    private string? selectedUserEmail;
+
+    protected override void OnInitialized()
+    {
+        users = UserService.GetUsers();
+        selectedUserEmail = "";
+    }
+
+    private void OnDelete(string selectedUserEmail)
+    {
+        UserService.DeleteUser(selectedUserEmail);
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+    
+    private void OnUpdate(string email)
+    {
+        selectedUserEmail = email;
+        NavigationManager.NavigateTo("/update-user/" + selectedUserEmail);
+    }
+}

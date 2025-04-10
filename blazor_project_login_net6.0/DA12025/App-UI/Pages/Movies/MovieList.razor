@@ -1,0 +1,55 @@
+﻿@page "/movies"
+@using Services
+@using Services.Models
+
+@inject MovieService MovieService
+@inject NavigationManager NavigationManager
+
+<h1>Movie List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Release Date</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in movies)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Director</td>
+                <td>@movie.ReleaseDate.Year/@movie.ReleaseDate.Month/@movie.ReleaseDate.Day</td>
+                <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(movie.Title)">Update</button></td>
+                <td><button type="button" class="btn btn-secondary" @onclick="() => OnDelete(movie.Title)">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<MovieDTO> movies;
+    private string? selectedMovieTitle;
+
+    protected override void OnInitialized()
+    {
+        movies = MovieService.GetMovies();
+        selectedMovieTitle = "";
+    }
+
+    private void OnDelete(string title)
+    {
+        MovieService.DeleteMovie(title);
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    private void OnUpdate(string title)
+    {
+        selectedMovieTitle = title;
+        NavigationManager.NavigateTo("/update-movie/" + selectedMovieTitle);
+    }
+}

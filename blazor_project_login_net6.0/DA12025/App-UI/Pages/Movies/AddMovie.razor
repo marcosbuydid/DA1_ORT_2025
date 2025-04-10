@@ -1,0 +1,84 @@
+﻿@page "/add-movie"
+@using Services
+@using Services.Models
+
+@inject MovieService MovieService
+@inject NavigationManager NavigationManager
+
+<h1>Add Movie</h1>
+
+@if (alertVisible)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>@alertMessage</strong>
+        <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+    </div>
+}
+
+<body>
+<EditForm Model="@movieDTO" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <label for="title">Títle</label>
+        <input type="text" class="form-control" id="title" @bind="movieDTO.Title"/>
+        <ValidationMessage For="@(() => movieDTO.Title)"/>
+    </div>
+    <div class="form-group">
+        <label for="director">Director</label>
+        <input type="text" class="form-control" id="director" @bind="movieDTO.Director"/>
+        <ValidationMessage For="@(() => movieDTO.Director)"/>
+    </div>
+    <div class="form-group">
+        <label for="releaseDate">Release Date</label>
+        <input type="date" id="releaseDate" name="movie-releaseDate" @bind="movieDTO.ReleaseDate"/>
+    </div>
+    <div class="form-group">
+        <label for="budget">Budget</label>
+        <input type="number" class="form-control" id="budget" min="0" max="2147483647" @bind="movieDTO.Budget"/>
+        <ValidationMessage For="@(() => movieDTO.Budget)"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+</EditForm>
+
+</body>
+
+@code {
+    private MovieDTO movieDTO;
+    private bool alertVisible = false;
+    private string alertMessage = "";
+
+    protected override void OnInitialized()
+    {
+        movieDTO = new MovieDTO();
+        movieDTO.Title = "";
+        movieDTO.Director = "";
+        movieDTO.ReleaseDate = DateTime.Now;
+        movieDTO.Budget = 0;
+    }
+
+    private void OnSubmit()
+    {
+        try
+        {
+            MovieService.AddMovie(movieDTO);
+            NavigationManager.NavigateTo("/movies");
+        }
+        catch (ArgumentException e)
+        {
+            alertVisible = true;
+            alertMessage = e.Message;
+        }
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = !alertVisible;
+    }
+
+}
