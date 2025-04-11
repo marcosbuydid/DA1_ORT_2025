@@ -11,12 +11,12 @@ class Program
             Person employee = new Employee("John", 30, 3000, 1000);
             Person contractor = new Contractor("Anna", 25, 1000, 50, 160);
 
-            Proyect proyect = new Proyect("Software Proyect", 50000, new DateTime(2025, 08, 01));
+            Project project = new Project("Software Proyect", 50000, new DateTime(2025, 04, 10));
 
-            proyect.AddContributors(employee);
-            proyect.AddContributors(contractor);
+            project.AddContributors(employee);
+            project.AddContributors(contractor);
 
-            proyect.ShowContributorsSalary();
+            project.ShowContributorsSalary();
         }
         catch (ArgumentException e)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Domain;
 
-public class Proyect
+public class Project
 {
     private string _name;
     private decimal _budget;
@@ -54,7 +54,7 @@ public class Proyect
         get => _staffList;
     }
 
-    public Proyect(string name, decimal budget, DateTime startDate)
+    public Project(string name, decimal budget, DateTime startDate)
     {
         Name = name;
         Budget = budget;
