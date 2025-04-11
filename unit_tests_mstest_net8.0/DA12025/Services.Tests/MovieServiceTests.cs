@@ -8,34 +8,34 @@ public class MovieServiceTests
 {
     private InMemoryDatabase _inMemoryDatabase;
     private MovieService _movieService;
-    private Movie movie;
+    private Movie _movie;
 
     [TestInitialize]
     public void Setup()
     {
         _inMemoryDatabase = new InMemoryDatabase();
         _movieService = new MovieService(_inMemoryDatabase);
-        movie = new Movie("Sing Sing", "Greg Kwedar", new DateTime(2024, 07, 12), 2000000);
+        _movie = new Movie("Sing Sing", "Greg Kwedar", new DateTime(2024, 07, 12), 2000000);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddNewMovie_WhenAddADuplicateMovie_ThenThrowException()
+    public void AddNewMovie_WhenAddTheSameMovieTwice_ThenThrowException()
     {
         //arrange
         //act
-        _movieService.AddMovie(movie);
-        _movieService.AddMovie(movie);
+        _movieService.AddMovie(_movie);
+        _movieService.AddMovie(_movie);
         //assert
     }
 
     [TestMethod]
-    public void AddNewMovie_WhenAddMovie_ThenReturnSuccessfully()
+    public void AddNewMovie_WhenAddAMovie_ThenReturnSuccessfully()
     {
         //arrange
         //act
-        _movieService.AddMovie(movie);
-        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == movie.Title);
+        _movieService.AddMovie(_movie);
+        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movie.Title);
         //assert
         Assert.IsNotNull(retrievedMovie);
         Assert.IsTrue(_inMemoryDatabase.Movies.Count == 1);
@@ -52,18 +52,18 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovie_WhenGetAnExistentMovie_ThenReturnSuccessfully()
+    public void GetMovie_WhenGetAnExistentMovie_ThenTheMovieIsReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(movie);
+        _inMemoryDatabase.Movies.Add(_movie);
         //act
-        var retrievedMovie = _movieService.GetMovie(movie.Title);
+        var retrievedMovie = _movieService.GetMovie(_movie.Title);
         //assert
-        Assert.AreSame(retrievedMovie, movie);
+        Assert.AreSame(retrievedMovie, _movie);
     }
 
     [TestMethod]
-    public void GetMovies_WhenGettingAllMoviesAndThereIsNoMovies_ThenReturnZero()
+    public void GetMovies_WhenGetAllMoviesAndThereAreNoMovies_ThenNoMoviesAreReturned()
     {
         //arrange
         //act
@@ -73,14 +73,14 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovies_WhenGettingAllMovies_ThenReturnAllMovies()
+    public void GetMovies_WhenGetAllMoviesAndThereAreSomeMovies_ThenAllMoviesAreReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(movie);
+        _inMemoryDatabase.Movies.Add(_movie);
         //act
         _movieService.GetMovies();
         //assert
-        Assert.IsTrue(_inMemoryDatabase.Movies.Contains(movie));
+        Assert.IsTrue(_inMemoryDatabase.Movies.Contains(_movie));
         Assert.IsTrue(_inMemoryDatabase.Movies.Count == 1);
     }
 
@@ -98,24 +98,24 @@ public class MovieServiceTests
     public void DeleteMovie_WhenDeleteAMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(movie);
+        _inMemoryDatabase.Movies.Add(_movie);
         //act
-        _movieService.DeleteMovie(movie.Title);
+        _movieService.DeleteMovie(_movie.Title);
         //assert
         Assert.IsTrue(_inMemoryDatabase.Movies.Count == 0);
     }
-
+    
     [TestMethod]
     public void UpdateMovie_WhenUpdateAMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(movie);
-        movie.Budget = 1000000;
+        _inMemoryDatabase.Movies.Add(_movie);
+        _movie.Budget = 1000000;
         //act
-        _movieService.UpdateMovie(movie);
-        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == movie.Title);
+        _movieService.UpdateMovie(_movie);
+        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movie.Title);
         //assert
-        Assert.AreSame(retrievedMovie, movie);
-        Assert.AreEqual(1000000, movie.Budget);
+        Assert.AreSame(retrievedMovie, _movie);
+        Assert.AreEqual(1000000, _movie.Budget);
     }
 }

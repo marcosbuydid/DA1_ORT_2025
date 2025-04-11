@@ -13,9 +13,20 @@ public class MovieTests
         movie = new Movie(null, "Ridley Scott", new DateTime(2024, 11, 22), 250000000);
         //assert
     }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewMovie_WhenTitleIsEmpty_ThenThrowException()
+    {
+        //arrange
+        Movie movie;
+        //act
+        movie = new Movie("", "Ridley Scott", new DateTime(2024, 11, 22), 250000000);
+        //assert
+    }
 
     [TestMethod]
-    public void CreateNewMovie_WhenTitleIsNotNullOrEmpty_ThenTitleIsValid()
+    public void CreateNewMovie_WhenTitleIsNotNullOrEmpty_ThenTitleShouldBeAssigned()
     {
         //arrange
         Movie movie;
@@ -27,7 +38,18 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenDirectorIsNullOrEmpty_ThenThrowException()
+    public void CreateNewMovie_WhenDirectorIsNull_ThenThrowException()
+    {
+        //arrange
+        Movie movie;
+        //act
+        movie = new Movie("Gladiator 2", null, new DateTime(2024, 11, 22), 250000000);
+        //assert
+    }
+    
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewMovie_WhenDirectorIsEmpty_ThenThrowException()
     {
         //arrange
         Movie movie;
@@ -37,7 +59,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenDirectorIsNotNullOrEmpty_ThenDirectorIsValid()
+    public void CreateNewMovie_WhenDirectorIsNotNullOrEmpty_ThenDirectorShouldBeAssigned()
     {
         //arrange
         Movie movie;
@@ -48,7 +70,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenReleaseDateIsEarlierThanToday_ThenReleaseDateIsValid()
+    public void CreateNewMovie_WhenReleaseDateIsEarlierThanToday_ThenReleaseDateShouldBeAssigned()
     {
         //arrange
         Movie movie;
@@ -70,7 +92,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenBudgetIsPositive_ThenBudgetIsValid()
+    public void CreateNewMovie_WhenBudgetIsPositive_ThenBudgetShouldBeAssigned()
     {
         //arrange
         Movie movie;
