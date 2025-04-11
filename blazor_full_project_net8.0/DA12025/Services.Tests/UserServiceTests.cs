@@ -9,42 +9,42 @@ public class UserServiceTests
 {
     private InMemoryDatabase _inMemoryDatabase;
     private UserService _userService;
-    private User user;
-    private UserDTO userDTO;
+    private User _user;
+    private UserDTO _userDTO;
 
     [TestInitialize]
     public void Setup()
     {
         _inMemoryDatabase = new InMemoryDatabase();
         _userService = new UserService(_inMemoryDatabase);
-        user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
-        userDTO = new UserDTO();
-        userDTO.Name = "Nick";
-        userDTO.LastName = "Williams";
-        userDTO.Email = "nickwilliams@email.com";
-        userDTO.Password = "p@assword";
-        userDTO.Role = "User";
+        _user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
+        _userDTO = new UserDTO();
+        _userDTO.Name = "Nick";
+        _userDTO.LastName = "Williams";
+        _userDTO.Email = "nickwilliams@email.com";
+        _userDTO.Password = "p@assword";
+        _userDTO.Role = "User";
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddNewUser_WhenAddADuplicateUser_ThenThrowException()
+    public void AddUser_WhenAddAUserTwice_ThenThrowException()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
         //act
-        _userService.AddUser(userDTO);
-        _userService.AddUser(userDTO);
+        _userService.AddUser(_userDTO);
+        _userService.AddUser(_userDTO);
         //assert
     }
 
     [TestMethod]
-    public void AddNewUser_WhenAddUser_ThenReturnSuccessfully()
+    public void AddUser_WhenAddAUser_ThenReturnSuccessfully()
     {
         //arrange
         //act
-        _userService.AddUser(userDTO);
-        User? retrievedUser = _inMemoryDatabase.Users.Find(u => u.Email == userDTO.Email);
+        _userService.AddUser(_userDTO);
+        User? retrievedUser = _inMemoryDatabase.Users.Find(u => u.Email == _userDTO.Email);
         //assert
         Assert.IsNotNull(retrievedUser);
         Assert.IsTrue(_inMemoryDatabase.Users.Contains(retrievedUser));
@@ -61,21 +61,21 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUser_WhenGetAnExistentUser_ThenReturnSuccessfully()
+    public void GetUser_WhenGetAnExistentUser_ThenUserIsReturned()
     {
         //arrange
-        _inMemoryDatabase.Users.Add(user);
+        _inMemoryDatabase.Users.Add(_user);
         //act
-        UserDTO retrievedUser = _userService.GetUser(userDTO.Email);
+        UserDTO retrievedUser = _userService.GetUser(_userDTO.Email);
         //assert
-        Assert.AreEqual(retrievedUser.Name, user.Name);
-        Assert.AreEqual(retrievedUser.LastName, user.LastName);
-        Assert.AreEqual(retrievedUser.Email, user.Email);
-        Assert.AreEqual(retrievedUser.Role, user.Role);
+        Assert.AreEqual(retrievedUser.Name, _user.Name);
+        Assert.AreEqual(retrievedUser.LastName, _user.LastName);
+        Assert.AreEqual(retrievedUser.Email, _user.Email);
+        Assert.AreEqual(retrievedUser.Role, _user.Role);
     }
 
     [TestMethod]
-    public void GetUsers_WhenGettingAllUsersAndThereIsNoUsers_ThenReturnZero()
+    public void GetUsers_WhenGetAllUsersAndThereAreNoUsers_ThenNoUsersAreReturned()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
@@ -86,11 +86,11 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUsers_WhenGettingAllUsers_ThenReturnAllUsers()
+    public void GetUsers_WhenGetAllUsersAndThereAreSomeUsers_ThenAllUsersAreReturned()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(user);
+        _inMemoryDatabase.Users.Add(_user);
         //act
         List<UserDTO> users = _userService.GetUsers();
         //assert
@@ -108,13 +108,13 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void DeleteUser_WhenDeleteAUser_ThenReturnSuccessfully()
+    public void DeleteUser_WhenDeleteAnExistentUser_ThenReturnSuccessfully()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(user);
+        _inMemoryDatabase.Users.Add(_user);
         //act
-        _userService.DeleteUser(userDTO.Email);
+        _userService.DeleteUser(_userDTO.Email);
         //assert
         Assert.IsTrue(_inMemoryDatabase.Users.Count == 0);
     }
@@ -124,17 +124,17 @@ public class UserServiceTests
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(user);
-        userDTO.Name = "Tom";
-        userDTO.LastName = "Clarks";
+        _inMemoryDatabase.Users.Add(_user);
+        _userDTO.Name = "Tom";
+        _userDTO.LastName = "Clarks";
         //act
-        _userService.UpdateUser(userDTO);
-        User? updatedUser = _inMemoryDatabase.Users.Find(u => u.Email == userDTO.Email);
+        _userService.UpdateUser(_userDTO);
+        User? updatedUser = _inMemoryDatabase.Users.Find(u => u.Email == _userDTO.Email);
         //assert
-        Assert.AreEqual(userDTO.Name, updatedUser.Name);
-        Assert.AreEqual(userDTO.LastName, updatedUser.LastName);
-        Assert.AreEqual(userDTO.Email, updatedUser.Email);
-        Assert.AreEqual(userDTO.Password, updatedUser.Password);
-        Assert.AreEqual(userDTO.Role, updatedUser.Role);
+        Assert.AreEqual(_userDTO.Name, updatedUser.Name);
+        Assert.AreEqual(_userDTO.LastName, updatedUser.LastName);
+        Assert.AreEqual(_userDTO.Email, updatedUser.Email);
+        Assert.AreEqual(_userDTO.Password, updatedUser.Password);
+        Assert.AreEqual(_userDTO.Role, updatedUser.Role);
     }
 }

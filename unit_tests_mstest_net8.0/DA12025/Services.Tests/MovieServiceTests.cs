@@ -20,7 +20,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddNewMovie_WhenAddTheSameMovieTwice_ThenThrowException()
+    public void AddMovie_WhenAddTheSameMovieTwice_ThenThrowException()
     {
         //arrange
         //act
@@ -30,7 +30,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void AddNewMovie_WhenAddAMovie_ThenReturnSuccessfully()
+    public void AddMovie_WhenAddAMovie_ThenReturnSuccessfully()
     {
         //arrange
         //act
