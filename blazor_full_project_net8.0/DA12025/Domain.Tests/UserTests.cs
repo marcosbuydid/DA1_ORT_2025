@@ -26,7 +26,18 @@ public class UserTests
     }
     
     [TestMethod]
-    public void CreateNewUser_WhenNameIsNotNull_ThenNameIsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewUser_WhenNameIsEmpty_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("", "Williams", "nickwilliams@email.com", "p@assword", "User");
+        //assert
+    }
+    
+    [TestMethod]
+    public void CreateNewUser_WhenNameIsNotNullOrEmpty_ThenNameShouldBeAssigned()
     {
         //arrange
         User user;
@@ -48,7 +59,18 @@ public class UserTests
     }
     
     [TestMethod]
-    public void CreateNewUser_WhenLastNameIsNotNull_ThenLastNameIsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewUser_WhenLastNameIsEmpty_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Nick", "", "nickwilliams@email.com", "p@assword", "User");
+        //assert
+    }
+    
+    [TestMethod]
+    public void CreateNewUser_WhenLastNameIsNotNullOrEmpty_ThenLastNameShouldBeAssigned()
     {
         //arrange
         User user;
@@ -70,7 +92,18 @@ public class UserTests
     }
     
     [TestMethod]
-    public void CreateNewUser_WhenEmailIsNotNull_ThenEmailIsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewUser_WhenEmailIsEmpty_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Nick", "Williams", "", "p@assword", "User");
+        //assert
+    }
+    
+    [TestMethod]
+    public void CreateNewUser_WhenEmailIsNotNullOrEmpty_ThenEmailShouldBeAssigned()
     {
         //arrange
         User user;
@@ -92,7 +125,18 @@ public class UserTests
     }
     
     [TestMethod]
-    public void CreateNewUser_WhenPasswordIsNotNull_ThenPasswordIsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewUser_WhenPasswordIsEmpty_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Nick", "Williams", "nickwilliams@email.com", "", "User");
+        //assert
+    }
+    
+    [TestMethod]
+    public void CreateNewUser_WhenPasswordIsNotNullOrEmpty_ThenPasswordShouldBeAssigned()
     {
         //arrange
         User user;
@@ -114,7 +158,18 @@ public class UserTests
     }
     
     [TestMethod]
-    public void CreateNewUser_WhenRoleIsNotNull_ThenRoleIsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void CreateNewUser_WhenRoleIsEmpty_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "");
+        //assert
+    }
+    
+    [TestMethod]
+    public void CreateNewUser_WhenRoleIsNotNullOrEmpty_ThenRoleIsShouldBeAssigned()
     {
         //arrange
         User user;

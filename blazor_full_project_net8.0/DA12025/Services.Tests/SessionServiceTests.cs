@@ -9,16 +9,16 @@ public class SessionServiceTests
 {
     private InMemoryDatabase _inMemoryDatabase;
     private SessionService _sessionService;
-    private User user;
-    private UserLoginDTO userLoginDTO;
+    private User _user;
+    private UserLoginDTO _userLoginDTO;
     
     [TestInitialize]
     public void Setup()
     {
         _inMemoryDatabase = new InMemoryDatabase();
         _sessionService = new SessionService(_inMemoryDatabase);
-        user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
-        userLoginDTO = new UserLoginDTO("nick@email.com", "password");
+        _user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
+        _userLoginDTO = new UserLoginDTO("nick@email.com", "password");
     }
     
     [TestMethod]
@@ -27,12 +27,12 @@ public class SessionServiceTests
     {
         //arrange
         //act
-        _sessionService.Login(userLoginDTO.Email, userLoginDTO.Password);
+        _sessionService.Login(_userLoginDTO.Email, _userLoginDTO.Password);
         //assert
     }
     
     [TestMethod]
-    public void LoggedUser_WhenGettingLoggedUserWithoutLogin_ThenLoggedUserIsNull()
+    public void GetLoggedUser_WhenGetLoggedUserWithoutLogin_ThenLoggedUserIsNull()
     {
         //arrange
         //act
@@ -42,29 +42,29 @@ public class SessionServiceTests
     }
     
     [TestMethod]
-    public void LoggedUser_WhenGettingLoggedUserAfterLoginOk_ThenLoggedUserIsNotNull()
+    public void GetLoggedUser_WhenGetLoggedUserAfterLoginOk_ThenLoggedUserIsNotNull()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(user);
-        _sessionService.Login(user.Email, user.Password);
+        _inMemoryDatabase.Users.Add(_user);
+        _sessionService.Login(_user.Email, _user.Password);
         //act
         UserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
         Assert.IsNotNull(loggedUser);
-        Assert.AreEqual(user.Name, loggedUser.Name);
-        Assert.AreEqual(user.LastName, loggedUser.LastName);
-        Assert.AreEqual(user.Email, loggedUser.Email);
-        Assert.AreEqual(user.Role, loggedUser.Role);
+        Assert.AreEqual(_user.Name, loggedUser.Name);
+        Assert.AreEqual(_user.LastName, loggedUser.LastName);
+        Assert.AreEqual(_user.Email, loggedUser.Email);
+        Assert.AreEqual(_user.Role, loggedUser.Role);
     }
     
     [TestMethod]
-    public void LoggedUser_WhenGettingLoggedUserAfterSessionLogout_ThenLoggedUserIsNull()
+    public void Logout_WhenGetLoggedUserAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
         _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(user);
-        _sessionService.Login(user.Email, user.Password);
+        _inMemoryDatabase.Users.Add(_user);
+        _sessionService.Login(_user.Email, _user.Password);
         //act
         _sessionService.Logout();
         //assert
