@@ -6,7 +6,7 @@ namespace ParkingServiceTests;
 public class ParkingServiceTests
 {
     [TestMethod]
-    public void ShouldChargeForParking_WhenParkingIsBetweenChargingHours_ThenItShouldBillNormally()
+    public void ShouldBill_WhenParkingIsBetweenChargingHours_ThenItShouldBillNormally()
     {
         //arrange
         //we select an hour between working hours (for example 2:00 PM)
@@ -20,7 +20,7 @@ public class ParkingServiceTests
     }
 
     [TestMethod]
-    public void ShouldChargeForParking_WhenParkingTimeIsAfterWorkingHours_ThenItShouldNotBill()
+    public void ShouldBill_WhenParkingTimeIsAfterWorkingHours_ThenItShouldNotBill()
     {
         //arrange
         //we select an hour after working hours (for example 8:00 PM)
@@ -34,7 +34,7 @@ public class ParkingServiceTests
     }
 
     [TestMethod]
-    public void ShouldChargeForParking_WhenParkingTimeIsBeforeWorkingHours_ThenItShouldNotBill()
+    public void ShouldBill_WhenParkingTimeIsBeforeWorkingHours_ThenItShouldNotBill()
     {
         //arrange
         //we select an hour before working hours (for example 7:00 AM)
