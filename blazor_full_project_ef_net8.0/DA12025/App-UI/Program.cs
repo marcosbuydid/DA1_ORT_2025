@@ -15,7 +15,7 @@ builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<SessionService>();
 
-builder.Services.AddDbContext<AppDbContext>(
+builder.Services.AddDbContextFactory<AppDbContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         providerOptions => providerOptions.EnableRetryOnFailure())
