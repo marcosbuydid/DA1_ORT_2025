@@ -21,12 +21,17 @@ public class SessionService : ISessionService
 
     public void Login(string email, string password)
     {
-        User? user = _inMemoryDatabase.Users.FirstOrDefault(user => user.Email == email && user.Password == password);
-        if (user == null)
+        if (LoggedUser.Current == null)
         {
-            throw new ArgumentException("User or password is incorrect, try again");
+            User? user =
+                _inMemoryDatabase.Users.FirstOrDefault(user => user.Email == email && user.Password == password);
+            if (user == null)
+            {
+                throw new ArgumentException("User or password is incorrect, try again");
+            }
+
+            LoggedUser.Current = FromEntity(user);
         }
-        LoggedUser.Current = FromEntity(user);
     }
 
     public void Logout()
