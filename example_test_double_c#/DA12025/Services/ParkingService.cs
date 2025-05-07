@@ -13,7 +13,7 @@ public class ParkingService
 
     public bool ShouldBill()
     {
-        var currentTime = _timeProvider.GetCurrentTime();
+        DateTime currentTime = _timeProvider.GetCurrentTime();
         //parking charges only apply between 10:00 AM and 6:00 PM
         return currentTime.Hour >= 10 && currentTime.Hour < 18;
     }
