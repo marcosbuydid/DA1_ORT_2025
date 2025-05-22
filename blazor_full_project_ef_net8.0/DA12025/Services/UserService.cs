@@ -22,7 +22,7 @@ public class UserService : IUserService
 
     public void UpdateUser(UserDTO userToUpdate)
     {
-        User user = GetUserObject(userToUpdate.Email);
+        User? user = _userRepository.Get(u => u.Email == userToUpdate.Email);
         user.Name = userToUpdate.Name;
         user.LastName = userToUpdate.LastName;
         user.Email = userToUpdate.Email;
@@ -44,7 +44,7 @@ public class UserService : IUserService
 
     public void DeleteUser(string email)
     {
-        User userToDelete = GetUserObject(email);
+        User? userToDelete = _userRepository.Get(u => u.Email == email);
         _userRepository.Delete(userToDelete);
     }
 
@@ -57,17 +57,6 @@ public class UserService : IUserService
         }
 
         return FromEntity(user);
-    }
-
-    private User GetUserObject(string email)
-    {
-        User? user = _userRepository.Get(user => user.Email == email);
-        if (user == null)
-        {
-            throw new ArgumentException("Cannot find user with this email");
-        }
-
-        return user;
     }
 
     private void ValidateUserEmail(string email)
