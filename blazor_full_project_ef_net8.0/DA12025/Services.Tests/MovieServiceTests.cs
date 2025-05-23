@@ -99,7 +99,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(ArgumentNullException))]
     public void DeleteMovie_WhenDeleteAnUndefinedMovie_ThenThrowException()
     {
         //arrange
@@ -120,7 +120,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(NullReferenceException))]
     public void UpdateMovie_WhenUpdateAnInvalidMovie_ThenThrowException()
     {
         //arrange

@@ -102,7 +102,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(ArgumentNullException))]
     public void DeleteUser_WhenDeleteAnUndefinedUser_ThenThrowException()
     {
         //arrange
@@ -123,7 +123,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(NullReferenceException))]
     public void UpdateMovie_WhenUpdateAnInvalidUser_ThenThrowException()
     {
         //arrange
