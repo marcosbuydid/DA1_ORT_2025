@@ -35,12 +35,22 @@ public class UserService : IUserService
     public void DeleteUser(string email)
     {
         User? user = _userRepository.Get(u => u.Email == email);
+        if (user == null)
+        {
+            throw new ArgumentException("Cannot find user with this email");
+        }
+
         _userRepository.Delete(user);
     }
 
     public void UpdateUser(UserDTO userToUpdate)
     {
         User? user = _userRepository.Get(u => u.Email == userToUpdate.Email);
+        if (user == null)
+        {
+            throw new ArgumentException("Cannot find the specified user");
+        }
+
         user.Name = userToUpdate.Name;
         user.LastName = userToUpdate.LastName;
         user.Email = userToUpdate.Email;

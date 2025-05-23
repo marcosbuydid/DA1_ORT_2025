@@ -23,6 +23,11 @@ namespace Services
         public void DeleteMovie(string title)
         {
             Movie? movie = _movieRepository.Get(m => m.Title == title);
+            if (movie == null)
+            {
+                throw new ArgumentException("Cannot find movie with this title");
+            }
+
             _movieRepository.Delete(movie);
         }
 
@@ -41,6 +46,11 @@ namespace Services
         public void UpdateMovie(MovieDTO movieToUpdate)
         {
             Movie? movie = _movieRepository.Get(m => m.Title == movieToUpdate.Title);
+            if (movie == null)
+            {
+                throw new ArgumentException("Cannot find the specified movie");
+            }
+
             movie.Title = movieToUpdate.Title;
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
