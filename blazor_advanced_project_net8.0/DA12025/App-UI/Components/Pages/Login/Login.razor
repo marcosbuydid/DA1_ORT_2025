@@ -1,0 +1,73 @@
+﻿@page "/login"
+
+@using Services.Interfaces
+@using Services.Models
+
+@inject ISessionService SessionService
+@inject NavigationManager NavigationManager
+
+<div class="d-flex justify-content-center align-items-center">
+    <h1>Login</h1>
+</div>
+
+@if (alertVisible)
+{
+    <div class="d-flex justify-content-center align-items-center mt-2">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>@alertMessage</strong>
+            <button type="button" class="btn-close" aria-label="Close" @onclick="ToggleAlertVisibility"></button>
+        </div>
+    </div>
+}
+
+<div class="d-flex justify-content-center align-items-center mt-lg-4">
+    <div class="p-4 border rounded shadow bg-white" style="min-width: 500px;">
+        <EditForm Model="@userLoginDTO" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator/>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <InputText id="email" @bind-Value="userLoginDTO.Email" class="form-control"/>
+                <ValidationMessage For="@(() => userLoginDTO.Email)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <InputText id="password" @bind-Value="userLoginDTO.Password" type="password" class="form-control"/>
+                <ValidationMessage For="@(() => userLoginDTO.Password)"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4 w-100">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private UserLoginDTO userLoginDTO;
+    private bool alertVisible = false;
+    private string alertMessage = "";
+
+    protected override void OnInitialized()
+    {
+        userLoginDTO = new UserLoginDTO("", "");
+    }
+
+    private void HandleLogin()
+    {
+        try
+        {
+            SessionService.Login(userLoginDTO.Email, userLoginDTO.Password);
+            NavigationManager.NavigateTo("/");
+        }
+        catch (ArgumentException e)
+        {
+            alertVisible = true;
+            alertMessage = e.Message;
+        }
+    }
+
+    private void ToggleAlertVisibility()
+    {
+        alertVisible = !alertVisible;
+    }
+
+}
