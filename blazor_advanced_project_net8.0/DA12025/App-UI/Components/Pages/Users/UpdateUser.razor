@@ -1,0 +1,73 @@
+﻿@page "/update-user/{userEmail}"
+
+@using Services.Interfaces
+@using Services.Models
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+<h1>Update User</h1>
+
+<EditForm Model="@userDTO" OnValidSubmit="@(_ => OnUpdate(userDTO))">
+    <DataAnnotationsValidator/>
+    <div class="form-group mb-xl-3">
+        <label for="name">Name</label>
+        <input type="text" class="form-control mt-1" id="name" @bind="userDTO.Name"/>
+        <ValidationMessage For="@(() => userDTO.Name)"/>
+    </div>
+    <div class="form-group mb-xl-3">
+        <label for="lastname">LastName</label>
+        <input type="text" class="form-control mt-1" id="lastname" @bind="userDTO.LastName"/>
+        <ValidationMessage For="@(() => userDTO.LastName)"/>
+    </div>
+    <div class="form-group mb-xl-3">
+        <label for="email">Email</label>
+        <input type="email" class="form-control mt-1" id="email" @bind="userDTO.Email" disabled/>
+        <ValidationMessage For="@(() => userDTO.Email)"/>
+    </div>
+    <div class="form-group mb-xl-3">
+        <label for="role">Role</label>
+        <input type="text" class="form-control mt-1" id="role" @bind="userDTO.Role"/>
+        <ValidationMessage For="@(() => userDTO.Role)"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter] public string userEmail { get; set; }
+    private UserDTO userDTO;
+
+    //used to store original values
+    //if cancel button is pressed.
+    private string name;
+    private string lastName;
+    private string role;
+
+    protected override void OnInitialized()
+    {
+        userDTO = UserService.GetUser(userEmail);
+        name = userDTO.Name;
+        lastName = userDTO.LastName;
+        role = userDTO.Role;
+        //used to fill temporary password input only
+        //user service on update leaves the same
+        //password the user has
+        userDTO.Password = "87654321";
+    }
+
+    private void OnUpdate(UserDTO user)
+    {
+        UserService.UpdateUser(user);
+        NavigationManager.NavigateTo("/users");
+    }
+
+    private void OnCancel()
+    {
+        userDTO.Name = name;
+        userDTO.LastName = lastName;
+        userDTO.Role = role;
+        NavigationManager.NavigateTo("/users");
+    }
+
+}
