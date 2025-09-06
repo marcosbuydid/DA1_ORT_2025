@@ -10,7 +10,7 @@ public class UserTests
         //arrange
         User user;
         //act
-        user = new User("", "test@email.com", "P@ssw0rd");
+        user = new User("", "test@email.com", "P@ssw0rd.");
     }
 
     [TestMethod]
@@ -19,7 +19,7 @@ public class UserTests
         //arrange
         User user;
         //act
-        user = new User("Username", "username@email.com", "P@ssw0rd");
+        user = new User("Username", "username@email.com", "P@ssw0rd.");
         //assert
         Assert.AreEqual("Username", user.Name);
     }
@@ -31,7 +31,7 @@ public class UserTests
         //arrange
         User user;
         //act
-        user = new User("Username", "", "P@ssw0rd");
+        user = new User("Username", "", "P@ssw0rd.");
     }
 
     [TestMethod]
@@ -41,7 +41,7 @@ public class UserTests
         //arrange
         User user;
         //act
-        user = new User("Username", "@domain.com", "P@ssw0rd");
+        user = new User("Username", "@domain.com", "P@ssw0rd_");
     }
 
     [TestMethod]
@@ -50,7 +50,7 @@ public class UserTests
         //arrange
         User user;
         //act
-        user = new User("Username", "username@domain.com", "P@ssw0rd");
+        user = new User("Username", "username@domain.com", "P@ssw0rd$");
         //assert
         Assert.AreEqual("username@domain.com", user.Email);
     }
@@ -67,7 +67,17 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordIsLessThanEightCharsLong_ThenThrowException()
+    public void NewUser_WhenPasswordLengthIsNotValid_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Username", "email@domain.com", "pass.");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewUser_WhenPasswordHasNotAnySpecialChar_ThenThrowException()
     {
         //arrange
         User user;
@@ -76,13 +86,23 @@ public class UserTests
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void NewUser_WhenPasswordLengthIsOkButHasNotAnySpecialChar_ThenThrowException()
+    {
+        //arrange
+        User user;
+        //act
+        user = new User("Username", "email@domain.com", "Password1");
+    }
+
+    [TestMethod]
     public void NewUser_WhenPasswordIsValid_ThenPasswordShouldBeAssigned()
     {
         //arrange
         User user;
         //act
-        user = new User("Username", "username@email.com", "P@ssw0rd");
+        user = new User("Username", "username@email.com", "P@ssw0rd_");
         //assert
-        Assert.AreEqual("P@ssw0rd", user.Password);
+        Assert.AreEqual("P@ssw0rd_", user.Password);
     }
 }

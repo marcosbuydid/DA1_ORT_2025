@@ -6,7 +6,7 @@ public class User
 {
     private string _name;
     private string _email;
-    private string password;
+    private string _password;
 
     public string Name
     {
@@ -45,7 +45,7 @@ public class User
 
     public string Password
     {
-        get => password;
+        get => _password;
         set
         {
             if (String.IsNullOrEmpty(value))
@@ -62,7 +62,13 @@ public class User
                 }
             }
 
-            password = value;
+            string validSpecialCharsPattern = @"[!@#$%^&*._]";
+            if (!Regex.IsMatch(value, validSpecialCharsPattern))
+            {
+                throw new ArgumentException("password must have at least one special char");
+            }
+
+            _password = value;
         }
     }
 
