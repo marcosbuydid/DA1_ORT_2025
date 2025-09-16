@@ -35,10 +35,10 @@ public class MovieServiceTests
         //arrange
         //act
         _movieService.AddMovie(_movie);
-        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movie.Title);
         //assert
+        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         Assert.IsNotNull(retrievedMovie);
-        Assert.IsTrue(_inMemoryDatabase.Movies.Count == 1);
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 1);
     }
 
     [TestMethod]
@@ -55,9 +55,9 @@ public class MovieServiceTests
     public void GetMovie_WhenGetAnExistentMovie_ThenTheMovieIsReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.AddMovie(_movie);
         //act
-        var retrievedMovie = _movieService.GetMovie(_movie.Title);
+        Movie retrievedMovie = _movieService.GetMovie(_movie.Title);
         //assert
         Assert.AreSame(retrievedMovie, _movie);
     }
@@ -69,19 +69,19 @@ public class MovieServiceTests
         //act
         _movieService.GetMovies();
         //assert
-        Assert.IsTrue(_inMemoryDatabase.Movies.Count == 0);
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 0);
     }
 
     [TestMethod]
     public void GetMovies_WhenGetAllMoviesAndThereAreSomeMovies_ThenAllMoviesAreReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.AddMovie(_movie);
         //act
         _movieService.GetMovies();
         //assert
-        Assert.IsTrue(_inMemoryDatabase.Movies.Contains(_movie));
-        Assert.IsTrue(_inMemoryDatabase.Movies.Count == 1);
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Contains(_movie));
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 1);
     }
 
     [TestMethod]
@@ -98,22 +98,33 @@ public class MovieServiceTests
     public void DeleteMovie_WhenDeleteAMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.AddMovie(_movie);
         //act
         _movieService.DeleteMovie(_movie.Title);
         //assert
-        Assert.IsTrue(_inMemoryDatabase.Movies.Count == 0);
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 0);
     }
-    
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void UpdateMovie_WhenUpdateAnUndefinedMovie_ThenThrowException()
+    {
+        //arrange
+        //act
+        _movieService.UpdateMovie(_movie);
+        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
+        //assert
+    }
+
     [TestMethod]
     public void UpdateMovie_WhenUpdateAMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.AddMovie(_movie);
         _movie.Budget = 1000000;
         //act
         _movieService.UpdateMovie(_movie);
-        var retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movie.Title);
+        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         //assert
         Assert.AreSame(retrievedMovie, _movie);
         Assert.AreEqual(1000000, _movie.Budget);
