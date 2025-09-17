@@ -17,14 +17,14 @@ public class UserService : IUserService
     public void AddUser(UserDTO user)
     {
         ValidateUserEmail(user.Email);
-        _inMemoryDatabase.Users.Add(ToEntity(user));
+        _inMemoryDatabase.AddUser(ToEntity(user));
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _inMemoryDatabase.Users)
+        foreach (var user in _inMemoryDatabase.GetUsers())
         {
             usersDTO.Add(FromEntity(user));
         }
@@ -34,22 +34,35 @@ public class UserService : IUserService
 
     public void DeleteUser(string email)
     {
-        UserDTO userToDelete = GetUser(email);
-        User? user = _inMemoryDatabase.Users.Find(u => u.Email == userToDelete.Email);
-        _inMemoryDatabase.Users.Remove(user);
+        User? userToDelete = _inMemoryDatabase.GetUser(email);
+        if (userToDelete == null)
+        {
+            throw new ArgumentException("Cannot find the specified user");
+        }
+
+        _inMemoryDatabase.DeleteUser(userToDelete);
     }
 
     public void UpdateUser(UserDTO userToUpdate)
     {
-        User? user = _inMemoryDatabase.Users.Find(u => u.Email == userToUpdate.Email);
-        var userToUpdateIndex = _inMemoryDatabase.Users.IndexOf(user);
+        User? user = _inMemoryDatabase.GetUser(userToUpdate.Email);
+        if (user == null)
+        {
+            throw new ArgumentException("Cannot find the specified user");
+        }
+
+        user.Name = userToUpdate.Name;
+        user.LastName = userToUpdate.LastName;
+        user.Email = userToUpdate.Email;
+        //in this example password is non-updatable
         userToUpdate.Password = user.Password;
-        _inMemoryDatabase.Users[userToUpdateIndex] = ToEntity(userToUpdate);
+        user.Role = userToUpdate.Role;
+        _inMemoryDatabase.UpdateUser(user);
     }
 
     public UserDTO GetUser(string email)
     {
-        User? user = _inMemoryDatabase.Users.FirstOrDefault(user => user.Email == email);
+        User? user = _inMemoryDatabase.GetUser(email);
         if (user == null)
         {
             throw new ArgumentException("Cannot find user with this email");
@@ -60,7 +73,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmail(string email)
     {
-        foreach (var user in _inMemoryDatabase.Users)
+        foreach (var user in _inMemoryDatabase.GetUsers())
         {
             if (user.Email == email)
             {
@@ -69,7 +82,7 @@ public class UserService : IUserService
         }
     }
 
-    private User ToEntity(UserDTO userDTO)
+    private static User ToEntity(UserDTO userDTO)
     {
         return new User(userDTO.Name, userDTO.LastName, userDTO.Email, userDTO.Password, userDTO.Role);
     }
