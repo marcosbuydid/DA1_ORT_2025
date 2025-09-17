@@ -17,22 +17,25 @@ namespace Services
         public void AddMovie(MovieDTO movie)
         {
             ValidateUniqueTitle(movie.Title);
-
-            _inMemoryDatabase.Movies.Add(ToEntity(movie));
+            _inMemoryDatabase.AddMovie(ToEntity(movie));
         }
 
         public void DeleteMovie(string title)
         {
-            MovieDTO movieToDelete = GetMovie(title);
-            Movie? movie = _inMemoryDatabase.Movies.Find(m => m.Title == movieToDelete.Title);
-            _inMemoryDatabase.Movies.Remove(movie);
+            Movie? movieToDelete = _inMemoryDatabase.GetMovie(title);
+            if (movieToDelete == null)
+            {
+                throw new ArgumentException("Cannot find the specified movie");
+            }
+
+            _inMemoryDatabase.DeleteMovie(movieToDelete);
         }
 
         public List<MovieDTO> GetMovies()
         {
             List<MovieDTO> moviesDTO = new List<MovieDTO>();
 
-            foreach (var movie in _inMemoryDatabase.Movies)
+            foreach (var movie in _inMemoryDatabase.GetMovies())
             {
                 moviesDTO.Add(FromEntity(movie));
             }
@@ -42,15 +45,23 @@ namespace Services
 
         public void UpdateMovie(MovieDTO movieToUpdate)
         {
-            Movie? movie = _inMemoryDatabase.Movies.Find(m => m.Title == movieToUpdate.Title);
-            var movieToUpdateIndex = _inMemoryDatabase.Movies.IndexOf(movie);
+            Movie? movie = _inMemoryDatabase.GetMovie(movieToUpdate.Title);
+            if (movie == null)
+            {
+                throw new ArgumentException("Cannot find the specified movie");
+            }
+
+            movie.Title = movieToUpdate.Title;
+            movie.Director = movieToUpdate.Director;
+            movie.ReleaseDate = movieToUpdate.ReleaseDate;
+            //in this example budget is non-updatable
             movieToUpdate.Budget = movie.Budget;
-            _inMemoryDatabase.Movies[movieToUpdateIndex] = ToEntity(movieToUpdate);
+            _inMemoryDatabase.UpdateMovie(movie);
         }
 
         public MovieDTO GetMovie(string title)
         {
-            Movie? movie = _inMemoryDatabase.Movies.FirstOrDefault(movie => movie.Title == title);
+            Movie? movie = _inMemoryDatabase.GetMovie(title);
             if (movie == null)
             {
                 throw new ArgumentException("Cannot find movie with this title");
@@ -59,9 +70,9 @@ namespace Services
             return FromEntity(movie);
         }
 
-        private void ValidateUniqueTitle(String title)
+        private void ValidateUniqueTitle(string title)
         {
-            foreach (var movie in _inMemoryDatabase.Movies)
+            foreach (var movie in _inMemoryDatabase.GetMovies())
             {
                 if (movie.Title == title)
                 {
@@ -70,7 +81,7 @@ namespace Services
             }
         }
 
-        private Movie ToEntity(MovieDTO movieDTO)
+        private static Movie ToEntity(MovieDTO movieDTO)
         {
             return new Movie(movieDTO.Title, movieDTO.Director, movieDTO.ReleaseDate, movieDTO.Budget);
         }
