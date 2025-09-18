@@ -18,20 +18,15 @@ public class MovieServiceTests
         _inMemoryDatabase = new InMemoryDatabase();
         _movieService = new MovieService(_inMemoryDatabase);
         _movie = new Movie("Sing Sing", "Greg Kwedar", new DateTime(2024, 07, 12), 2000000);
-        _movieDTO = new MovieDTO();
-        _movieDTO.Title = "Sing Sing";
-        _movieDTO.Director = "Greg Kwedar";
-        _movieDTO.ReleaseDate = DateTime.Today;
-        _movieDTO.Budget = 2000000;
+        _movieDTO = new MovieDTO("Sing Sing", "Greg Kwedar", DateTime.Today, 2000000);
     }
-
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void AddMovie_WhenAddAMovieTwice_ThenThrowException()
     {
         //arrange
-        _inMemoryDatabase.Movies.Clear();
+        _inMemoryDatabase.GetMovies().Clear();
         //act
         _movieService.AddMovie(_movieDTO);
         _movieService.AddMovie(_movieDTO);
@@ -44,10 +39,10 @@ public class MovieServiceTests
         //arrange
         //act
         _movieService.AddMovie(_movieDTO);
-        Movie? retrievedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movie.Title);
         //assert
+        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         Assert.IsNotNull(retrievedMovie);
-        Assert.IsTrue(_inMemoryDatabase.Movies.Contains(retrievedMovie));
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Contains(retrievedMovie));
     }
 
     [TestMethod]
@@ -64,7 +59,7 @@ public class MovieServiceTests
     public void GetMovie_WhenGetAnExistentMovie_ThenTheMovieIsReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.AddMovie(_movie);
         //act
         MovieDTO retrievedMovie = _movieService.GetMovie(_movie.Title);
         //assert
@@ -77,7 +72,7 @@ public class MovieServiceTests
     public void GetMovies_WhenGetAllMoviesAndThereAreNoMovies_ThenNoMoviesAreReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Clear();
+        _inMemoryDatabase.GetMovies().Clear();
         //act
         List<MovieDTO> movies = _movieService.GetMovies();
         //assert
@@ -88,8 +83,8 @@ public class MovieServiceTests
     public void GetMovies_WhenGetAllMovies_ThenAllMoviesAreReturned()
     {
         //arrange
-        _inMemoryDatabase.Movies.Clear();
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.GetMovies().Clear();
+        _inMemoryDatabase.AddMovie(_movie);
         //act
         List<MovieDTO> movies = _movieService.GetMovies();
         //assert
@@ -110,26 +105,36 @@ public class MovieServiceTests
     public void DeleteMovie_WhenDeleteAnExistentMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Clear();
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.GetMovies().Clear();
+        _inMemoryDatabase.AddMovie(_movie);
         //act
         _movieService.DeleteMovie(_movie.Title);
         //assert
-        Assert.IsTrue(_inMemoryDatabase.Movies.Count == 0);
+        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 0);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void UpdateMovie_WhenUpdateAnUndefinedMovie_ThenThrowException()
+    {
+        //arrange
+        //act
+        _movieService.UpdateMovie(_movieDTO);
+        //assert
     }
 
     [TestMethod]
     public void UpdateMovie_WhenUpdateAMovie_ThenReturnSuccessfully()
     {
         //arrange
-        _inMemoryDatabase.Movies.Clear();
-        _inMemoryDatabase.Movies.Add(_movie);
+        _inMemoryDatabase.GetMovies().Clear();
+        _inMemoryDatabase.AddMovie(_movie);
         _movieDTO.Director = "Antoine Fuqua";
         _movieDTO.Budget = 1000000;
         //act
         _movieService.UpdateMovie(_movieDTO);
-        Movie? updatedMovie = _inMemoryDatabase.Movies.Find(m => m.Title == _movieDTO.Title);
         //assert
+        Movie? updatedMovie = _inMemoryDatabase.GetMovie(_movieDTO.Title);
         Assert.AreEqual(_movieDTO.Title, updatedMovie.Title);
         Assert.AreEqual(_movieDTO.Director, updatedMovie.Director);
         Assert.AreEqual(_movieDTO.Budget, updatedMovie.Budget);
