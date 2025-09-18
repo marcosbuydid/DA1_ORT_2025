@@ -9,7 +9,7 @@ public class UserLoginDTO
     [Required(ErrorMessage = "Password is required.")]
     public string Password { get; set; }
 
-    public UserLoginDTO(String email, String password)
+    public UserLoginDTO(string email, string password)
     {
         Email = email;
         Password = password;

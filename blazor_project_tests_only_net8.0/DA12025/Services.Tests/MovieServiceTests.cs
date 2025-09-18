@@ -112,7 +112,6 @@ public class MovieServiceTests
         //arrange
         //act
         _movieService.UpdateMovie(_movie);
-        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         //assert
     }
 
@@ -124,8 +123,8 @@ public class MovieServiceTests
         _movie.Budget = 1000000;
         //act
         _movieService.UpdateMovie(_movie);
-        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         //assert
+        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
         Assert.AreSame(retrievedMovie, _movie);
         Assert.AreEqual(1000000, _movie.Budget);
     }

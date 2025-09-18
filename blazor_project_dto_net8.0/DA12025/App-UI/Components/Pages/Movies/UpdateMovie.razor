@@ -31,20 +31,11 @@
 
 @code {
     [Parameter] public string movieTitle { get; set; }
-
     private MovieDTO movieDTO;
-
-    //used to store original values if cancel
-    //button is pressed.
-    //only used when data persistence is on memory
-    private string director;
-    private DateTime releaseDate;
 
     protected override void OnInitialized()
     {
         movieDTO = MovieService.GetMovie(movieTitle);
-        director = movieDTO.Director;
-        releaseDate = movieDTO.ReleaseDate;
     }
 
     private void OnUpdate(MovieDTO movie)
@@ -55,9 +46,7 @@
 
     private void OnCancel()
     {
-        movieDTO.Director = director;
-        movieDTO.ReleaseDate = releaseDate;
-
         NavigationManager.NavigateTo("/movies");
     }
+
 }

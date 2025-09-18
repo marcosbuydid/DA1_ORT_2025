@@ -11,7 +11,7 @@ public class SessionServiceTests
     private SessionService _sessionService;
     private User _user;
     private UserLoginDTO _userLoginDTO;
-    
+
     [TestInitialize]
     public void Setup()
     {
@@ -20,7 +20,7 @@ public class SessionServiceTests
         _user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
         _userLoginDTO = new UserLoginDTO("nick@email.com", "password");
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
     public void Login_WhenLoginWithWrongCredentials_ThenThrowException()
@@ -30,7 +30,7 @@ public class SessionServiceTests
         _sessionService.Login(_userLoginDTO.Email, _userLoginDTO.Password);
         //assert
     }
-    
+
     [TestMethod]
     public void GetLoggedUser_WhenGetLoggedUserWithoutLogin_ThenLoggedUserIsNull()
     {
@@ -40,13 +40,13 @@ public class SessionServiceTests
         //assert
         Assert.IsNull(loggedUser);
     }
-    
+
     [TestMethod]
     public void GetLoggedUser_WhenGetLoggedUserAfterLoginOk_ThenLoggedUserIsNotNull()
     {
         //arrange
-        _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(_user);
+        _inMemoryDatabase.GetUsers().Clear();
+        _inMemoryDatabase.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         UserDTO loggedUser = _sessionService.GetLoggedUser();
@@ -57,13 +57,13 @@ public class SessionServiceTests
         Assert.AreEqual(_user.Email, loggedUser.Email);
         Assert.AreEqual(_user.Role, loggedUser.Role);
     }
-    
+
     [TestMethod]
     public void Logout_WhenGetLoggedUserAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
-        _inMemoryDatabase.Users.Clear();
-        _inMemoryDatabase.Users.Add(_user);
+        _inMemoryDatabase.GetUsers().Clear();
+        _inMemoryDatabase.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         _sessionService.Logout();

@@ -14,5 +14,15 @@ namespace Services.Models
 
         [Required(ErrorMessage = "Budget is required.")]
         public int Budget { get; set; }
+
+        public MovieDTO() {}
+
+        public MovieDTO(string title, string director, DateTime releaseDate, int budget)
+        {
+            Title = title;
+            Director = director;
+            ReleaseDate = releaseDate;
+            Budget = budget;
+        }
     }
 }
