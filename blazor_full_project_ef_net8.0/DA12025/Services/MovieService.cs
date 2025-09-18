@@ -17,14 +17,14 @@ namespace Services
         public void AddMovie(MovieDTO movie)
         {
             ValidateUniqueTitle(movie.Title);
-            _movieRepository.Add(ToEntity(movie));
+            _movieRepository.AddMovie(ToEntity(movie));
         }
 
         public List<MovieDTO> GetMovies()
         {
             List<MovieDTO> moviesDTO = new List<MovieDTO>();
 
-            foreach (var movie in _movieRepository.GetAll())
+            foreach (var movie in _movieRepository.GetMovies())
             {
                 moviesDTO.Add(FromEntity(movie));
             }
@@ -34,18 +34,18 @@ namespace Services
 
         public void DeleteMovie(string title)
         {
-            Movie? movieToDelete = _movieRepository.Get(m => m.Title == title);
+            Movie? movieToDelete = _movieRepository.GetMovie(m => m.Title == title);
             if (movieToDelete == null)
             {
-                throw new ArgumentException("Cannot find movie with this title");
+                throw new ArgumentException("Cannot find a movie with this title");
             }
 
-            _movieRepository.Delete(movieToDelete);
+            _movieRepository.DeleteMovie(movieToDelete);
         }
 
         public void UpdateMovie(MovieDTO movieToUpdate)
         {
-            Movie? movie = _movieRepository.Get(m => m.Title == movieToUpdate.Title);
+            Movie? movie = _movieRepository.GetMovie(m => m.Title == movieToUpdate.Title);
             if (movie == null)
             {
                 throw new ArgumentException("Cannot find the specified movie");
@@ -54,15 +54,15 @@ namespace Services
             movie.Title = movieToUpdate.Title;
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
-            _movieRepository.Update(movie);
+            _movieRepository.UpdateMovie(movie);
         }
 
         public MovieDTO GetMovie(string title)
         {
-            Movie? movie = _movieRepository.Get(movie => movie.Title == title);
+            Movie? movie = _movieRepository.GetMovie(movie => movie.Title == title);
             if (movie == null)
             {
-                throw new ArgumentException("Cannot find movie with this title");
+                throw new ArgumentException("Cannot find a movie with this title");
             }
 
             return FromEntity(movie);
@@ -70,7 +70,7 @@ namespace Services
 
         private void ValidateUniqueTitle(String title)
         {
-            foreach (var movie in _movieRepository.GetAll())
+            foreach (var movie in _movieRepository.GetMovies())
             {
                 if (movie.Title == title)
                 {
@@ -79,7 +79,7 @@ namespace Services
             }
         }
 
-        private Movie ToEntity(MovieDTO movieDTO)
+        private static Movie ToEntity(MovieDTO movieDTO)
         {
             return new Movie(movieDTO.Id, movieDTO.Title, movieDTO.Director, movieDTO.ReleaseDate, movieDTO.Budget) { };
         }

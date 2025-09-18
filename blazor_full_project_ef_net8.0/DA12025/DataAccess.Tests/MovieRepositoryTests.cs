@@ -30,44 +30,44 @@ public class MovieRepositoryTests
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Add_WhenAddIsInvokedWithAnEmptyMovie_ThenThrowException()
+    public void AddMovie_WhenCalledWithEmptyMovie_ThenThrowsException()
     {
         //arrange
         //act
-        _movieRepository.Add(new Movie());
+        _movieRepository.AddMovie(new Movie());
     }
 
     [TestMethod]
-    public void Add_WhenAddIsInvoked_ThenTheMovieIsAdded()
+    public void AddMovie_WhenCalled_ThenMovieIsAdded()
     {
         //arrange
         //act
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //assert
-        IList<Movie> movies = _movieRepository.GetAll();
+        List<Movie> movies = _movieRepository.GetMovies();
         Assert.AreEqual(1, movies.Count);
         Assert.AreEqual("Black Rain", movies[0].Title);
     }
 
     [TestMethod]
-    public void GetAll_WhenGetAllIsInvoked_ThenAllMoviesAreReturned()
+    public void GetMovies_WhenCalled_ThenMoviesAreReturned()
     {
         //arrange
-        _movieRepository.Add(_movie);
-        _movieRepository.Add(_movie_two);
+        _movieRepository.AddMovie(_movie);
+        _movieRepository.AddMovie(_movie_two);
         //act
-        IList<Movie> movies = _movieRepository.GetAll();
+        List<Movie> movies = _movieRepository.GetMovies();
         //assert
         Assert.AreEqual(2, movies.Count);
     }
 
     [TestMethod]
-    public void Get_WhenGetIsInvoked_ThenTheMovieIsReturned()
+    public void GetMovie_WhenCalled_ThenMovieIsReturned()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
-        Movie? result = _movieRepository.Get(m => m.Id == 1);
+        Movie? result = _movieRepository.GetMovie(m => m.Id == 1);
         //assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Id);
@@ -78,49 +78,49 @@ public class MovieRepositoryTests
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Delete_WhenDeleteIsInvokedAndMovieNotExist_ThenThrowException()
+    public void DeleteMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         Movie aMovie = new Movie(990, "Unknown Movie", "ADirector", DateTime.Now, 1000);
         //act
-        _movieRepository.Delete(_movie);
+        _movieRepository.DeleteMovie(_movie);
     }
 
     [TestMethod]
-    public void Delete_WhenDeleteIsInvoked_ThenTheMovieIsRemoved()
+    public void DeleteMovie_WhenCalled_ThenMovieIsDeleted()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
-        _movieRepository.Delete(_movie);
+        _movieRepository.DeleteMovie(_movie);
         //assert
-        IList<Movie> result = _movieRepository.GetAll();
+        List<Movie> result = _movieRepository.GetMovies();
         Assert.AreEqual(0, result.Count);
     }
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Update_WhenUpdateIsInvokedWithADetachedMovie_ThenThrowException()
+    public void UpdateMovie_WhenCalledWithDetachedMovie_ThenThrowsException()
     {
         //arrange
-        Movie aMovie = new Movie(99, "Unknown Movie", "ADirector", DateTime.Now, 100);
         //we simulate the movie is not tracked
+        Movie aMovie = new Movie(99, "Unknown Movie", "ADirector", DateTime.Now, 100);
         //act
-        _movieRepository.Update(aMovie);
-        //it tries to update an object is not in the context
+        //it tries to update an object that`s not in the context
+        _movieRepository.UpdateMovie(aMovie);
     }
 
     [TestMethod]
-    public void Update_WhenUpdateIsInvoked_ThenTheMovieIsUpdated()
+    public void UpdateMovie_WhenCalled_ThenMovieIsUpdated()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         _movie.Title = "Updated Title";
         _movie.Director = "Updated Director";
         //act
-        _movieRepository.Update(_movie);
+        _movieRepository.UpdateMovie(_movie);
         //assert
-        Movie movieUpdated = _movieRepository.Get(m => m.Id == 1);
+        Movie? movieUpdated = _movieRepository.GetMovie(m => m.Id == 1);
         Assert.AreEqual("Updated Title", movieUpdated.Title);
         Assert.AreEqual("Updated Director", movieUpdated.Director);
     }

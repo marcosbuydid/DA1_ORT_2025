@@ -17,12 +17,12 @@ public class UserService : IUserService
     public void AddUser(UserDTO user)
     {
         ValidateUserEmail(user.Email);
-        _userRepository.Add(ToEntity(user));
+        _userRepository.AddUser(ToEntity(user));
     }
 
     public void UpdateUser(UserDTO userToUpdate)
     {
-        User? user = _userRepository.Get(u => u.Email == userToUpdate.Email);
+        User? user = _userRepository.GetUser(u => u.Email == userToUpdate.Email);
         if (user == null)
         {
             throw new ArgumentException("Cannot find the specified user");
@@ -32,14 +32,14 @@ public class UserService : IUserService
         user.LastName = userToUpdate.LastName;
         user.Email = userToUpdate.Email;
         user.Role = userToUpdate.Role;
-        _userRepository.Update(user);
+        _userRepository.UpdateUser(user);
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _userRepository.GetAll())
+        foreach (var user in _userRepository.GetUsers())
         {
             usersDTO.Add(FromEntity(user));
         }
@@ -49,21 +49,21 @@ public class UserService : IUserService
 
     public void DeleteUser(string email)
     {
-        User? userToDelete = _userRepository.Get(u => u.Email == email);
+        User? userToDelete = _userRepository.GetUser(u => u.Email == email);
         if (userToDelete == null)
         {
-            throw new ArgumentException("Cannot find user with this email");
+            throw new ArgumentException("Cannot find a user with this email");
         }
 
-        _userRepository.Delete(userToDelete);
+        _userRepository.DeleteUser(userToDelete);
     }
 
     public UserDTO GetUser(string email)
     {
-        User? user = _userRepository.Get(user => user.Email == email);
+        User? user = _userRepository.GetUser(user => user.Email == email);
         if (user == null)
         {
-            throw new ArgumentException("Cannot find user with this email");
+            throw new ArgumentException("Cannot find a user with this email");
         }
 
         return FromEntity(user);
@@ -71,7 +71,7 @@ public class UserService : IUserService
 
     private void ValidateUserEmail(string email)
     {
-        foreach (var user in _userRepository.GetAll())
+        foreach (var user in _userRepository.GetUsers())
         {
             if (user.Email == email)
             {
@@ -80,7 +80,7 @@ public class UserService : IUserService
         }
     }
 
-    private User ToEntity(UserDTO userDTO)
+    private static User ToEntity(UserDTO userDTO)
     {
         return new User(userDTO.Id, userDTO.Name, userDTO.LastName, userDTO.Email, userDTO.Password, userDTO.Role) { };
     }
