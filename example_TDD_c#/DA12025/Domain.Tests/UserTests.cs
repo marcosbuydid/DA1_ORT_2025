@@ -5,7 +5,7 @@ public class UserTests
 {
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenNameIsEmpty_ThenThrowException()
+    public void NewUser_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -14,7 +14,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void NewUser_WhenNameIsValid_ThenNameShouldBeAssigned()
+    public void NewUser_WhenNameIsValid_ThenNameIsAssigned()
     {
         //arrange
         User user;
@@ -26,7 +26,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenEmailIsEmpty_ThenThrowException()
+    public void NewUser_WhenEmailIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -36,7 +36,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenEmailIsNotValid_ThenThrowException()
+    public void NewUser_WhenEmailIsInvalid_ThenThrowsException()
     {
         //arrange
         User user;
@@ -45,7 +45,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void NewUser_WhenEmailIsValid_ThenEmailShouldBeAssigned()
+    public void NewUser_WhenEmailIsValid_ThenEmailIsAssigned()
     {
         //arrange
         User user;
@@ -57,7 +57,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordIsEmpty_ThenThrowException()
+    public void NewUser_WhenPasswordIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -67,7 +67,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordLengthIsNotValid_ThenThrowException()
+    public void NewUser_WhenPasswordLengthIsInvalid_ThenThrowsException()
     {
         //arrange
         User user;
@@ -77,7 +77,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordHasNotAnySpecialChar_ThenThrowException()
+    public void NewUser_WhenPasswordDoesNotHaveAnySpecialChar_ThenThrowsException()
     {
         //arrange
         User user;
@@ -87,7 +87,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewUser_WhenPasswordLengthIsOkButHasNotAnySpecialChar_ThenThrowException()
+    public void NewUser_WhenPasswordLengthIsValidButDoesNotHaveAnySpecialChar_ThenThrowsException()
     {
         //arrange
         User user;
@@ -96,7 +96,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void NewUser_WhenPasswordIsValid_ThenPasswordShouldBeAssigned()
+    public void NewUser_WhenPasswordIsValid_ThenPasswordIsAssigned()
     {
         //arrange
         User user;
