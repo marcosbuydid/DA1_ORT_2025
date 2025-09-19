@@ -37,18 +37,9 @@
     [Parameter] public string userEmail { get; set; }
     private UserDTO userDTO;
 
-    //used to store original values
-    //if cancel button is pressed.
-    private string name;
-    private string lastName;
-    private string role;
-
     protected override void OnInitialized()
     {
         userDTO = UserService.GetUser(userEmail);
-        name = userDTO.Name;
-        lastName = userDTO.LastName;
-        role = userDTO.Role;
         //used to fill temporary password input only
         //user service on update leaves the same
         //password the user has
@@ -63,9 +54,6 @@
 
     private void OnCancel()
     {
-        userDTO.Name = name;
-        userDTO.LastName = lastName;
-        userDTO.Role = role;
         NavigationManager.NavigateTo("/users");
     }
 

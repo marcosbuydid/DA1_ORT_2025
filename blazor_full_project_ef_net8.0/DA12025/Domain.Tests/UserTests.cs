@@ -4,7 +4,7 @@
 public class UserTests
 {
     [TestMethod]
-    public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
+    public void CreateNewUser_WhenConstructorHasValidData_ThenUserIsCreated()
     {
         //arrange
         User user;
@@ -15,7 +15,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenIdIsNotNull_ThenIdShouldBeAssigned()
+    public void CreateNewUser_WhenIdIsNotNull_ThenIdIsAssigned()
     {
         //arrange
         User user;
@@ -27,7 +27,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenNameIsNull_ThenThrowException()
+    public void CreateNewUser_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -38,7 +38,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenNameIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -48,7 +48,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenNameIsNotNullOrEmpty_ThenNameShouldBeAssigned()
+    public void CreateNewUser_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         User user;
@@ -60,7 +60,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenLastNameIsNull_ThenThrowException()
+    public void CreateNewUser_WhenLastNameIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -71,7 +71,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenLastNameIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenLastNameIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -81,7 +81,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenLastNameIsNotNullOrEmpty_ThenLastNameShouldBeAssigned()
+    public void CreateNewUser_WhenLastNameIsNotNullOrEmpty_ThenLastNameIsAssigned()
     {
         //arrange
         User user;
@@ -93,7 +93,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenEmailIsNull_ThenThrowException()
+    public void CreateNewUser_WhenEmailIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -104,7 +104,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenEmailIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenEmailIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -114,7 +114,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenEmailIsNotNullOrEmpty_ThenEmailShouldBeAssigned()
+    public void CreateNewUser_WhenEmailIsNotNullOrEmpty_ThenEmailIsAssigned()
     {
         //arrange
         User user;
@@ -126,7 +126,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenPasswordIsNull_ThenThrowException()
+    public void CreateNewUser_WhenPasswordIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -137,7 +137,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenPasswordIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenPasswordIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -147,7 +147,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenPasswordIsNotNullOrEmpty_ThenPasswordShouldBeAssigned()
+    public void CreateNewUser_WhenPasswordIsNotNullOrEmpty_ThenPasswordIsAssigned()
     {
         //arrange
         User user;
@@ -159,7 +159,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenRoleIsNull_ThenThrowException()
+    public void CreateNewUser_WhenRoleIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -170,7 +170,7 @@ public class UserTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenRoleIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenRoleIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -180,7 +180,7 @@ public class UserTests
     }
 
     [TestMethod]
-    public void CreateNewUser_WhenRoleIsNotNullOrEmpty_ThenRoleIsShouldBeAssigned()
+    public void CreateNewUser_WhenRoleIsNotNullOrEmpty_ThenRoleIsIsAssigned()
     {
         //arrange
         User user;

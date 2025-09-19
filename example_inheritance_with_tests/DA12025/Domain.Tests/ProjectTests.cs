@@ -4,7 +4,7 @@
 public class ProjectTests
 {
     [TestMethod]
-    public void NewProject_WhenConstructorIsNotNull_ThenProjectIsCreated()
+    public void NewProject_WhenConstructorHasValidData_ThenProjectIsCreated()
     {
         //arrange
         Project project;
@@ -16,17 +16,17 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenNameIsNull_ThenThrowException()
+    public void NewProject_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         Project project;
         //act
         project = new Project(null, 60000, new DateTime(2025, 03, 01));
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenNameIsEmpty_ThenThrowException()
+    public void NewProject_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -35,7 +35,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenNameIsNotNullOrEmpty_ThenNameShouldBeAssigned()
+    public void NewProject_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         Project project;
@@ -47,7 +47,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenBudgetIsCeroOrNegative_ThenThrowException()
+    public void NewProject_WhenBudgetIsCeroOrNegative_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -56,7 +56,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenBudgetIsPositive_ThenBudgetShouldBeAssigned()
+    public void NewProject_WhenBudgetIsPositive_ThenBudgetIsAssigned()
     {
         //arrange
         Project project;
@@ -67,7 +67,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenStartDateIsAfterToday_ThenThrowException()
+    public void NewProject_WhenStartDateIsAfterToday_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -76,7 +76,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenStartDateIsEarlierThanToday_ThenStartDateShouldBeAssigned()
+    public void NewProject_WhenStartDateIsEarlierThanToday_ThenStartDateIsAssigned()
     {
         //arrange
         Project project;
@@ -99,19 +99,19 @@ public class ProjectTests
         Assert.IsTrue(project.StaffList.Contains(employee));
         Assert.IsTrue(project.StaffList.Contains(contractor));
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenShowContributorsSalaryAndThereAreNoContributors_ThenThrowException()
+    public void ShowContributorsSalary_WhenCalledWithNoContributorsOnAProject_ThenThrowsException()
     {
         //arrange
         Project project = new Project("Software Upgrade", 15000, new DateTime(2022, 09, 01));
         //act
         project.ShowContributorsSalary();
     }
-    
+
     [TestMethod]
-    public void NewProject_WhenShowContributorsSalaryAndThereAreContributors_ThenProyectDetailsAndSalaryIsShowed()
+    public void ShowContributorsSalary_WhenCalledWithContributorsOnAProject_ThenProyectDetailsAndSalaryIsShowed()
     {
         //arrange
         Project project = new Project("Software Libraries Upgrade", 35000, new DateTime(2025, 04, 10));
@@ -124,6 +124,7 @@ public class ProjectTests
         project.ShowContributorsSalary();
         //assert
         var consoleOutput = stringWriter.ToString();
-        Assert.AreEqual("Proyect: Software Libraries Upgrade, Budget: $35000\r\nJohn has a salary of: $8000\r\n", consoleOutput);
+        Assert.AreEqual("Proyect: Software Libraries Upgrade, Budget: $35000\r\nJohn has a salary of: $8000\r\n",
+            consoleOutput);
     }
 }

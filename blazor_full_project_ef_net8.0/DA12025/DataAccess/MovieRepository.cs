@@ -5,24 +5,24 @@ namespace DataAccess;
 
 public class MovieRepository
 {
-    protected readonly AppDbContext _appDbContext;
+    private readonly AppDbContext _appDbContext;
 
     public MovieRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
     }
 
-    public IList<Movie> GetAll()
+    public List<Movie> GetMovies()
     {
         return _appDbContext.Set<Movie>().AsQueryable<Movie>().ToList();
     }
 
-    public Movie? Get(Func<Movie, bool> filter)
+    public Movie? GetMovie(Func<Movie, bool> filter)
     {
         return _appDbContext.Set<Movie>().FirstOrDefault(filter);
     }
 
-    public void Add(Movie movie)
+    public void AddMovie(Movie movie)
     {
         try
         {
@@ -31,11 +31,11 @@ public class MovieRepository
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot add the movie to database", e);
         }
     }
 
-    public void Delete(Movie movie)
+    public void DeleteMovie(Movie movie)
     {
         try
         {
@@ -44,11 +44,11 @@ public class MovieRepository
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot delete the movie", e);
         }
     }
 
-    public void Update(Movie movie)
+    public void UpdateMovie(Movie movie)
     {
         try
         {
@@ -58,7 +58,7 @@ public class MovieRepository
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot update the movie", e);
         }
     }
 }

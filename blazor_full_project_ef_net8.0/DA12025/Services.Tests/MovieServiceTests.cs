@@ -22,12 +22,7 @@ public class MovieServiceTests
         _movieRepository = new MovieRepository(_context);
         _movieService = new MovieService(_movieRepository);
         _movie = new Movie(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);
-        _movieDto = new MovieDTO();
-        _movieDto.Id = 1;
-        _movieDto.Title = "Black Rain";
-        _movieDto.Director = "Ridley Scott";
-        _movieDto.ReleaseDate = new DateTime(1989, 9, 22);
-        _movieDto.Budget = 30000000;
+        _movieDto = new MovieDTO(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);
     }
 
     [TestCleanup]
@@ -37,10 +32,10 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovies_WhenGetMoviesIsInvoked_ThenAllMoviesAreReturned()
+    public void GetMovies_WhenCalled_ThenMoviesAreReturned()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         List<MovieDTO> movies = _movieService.GetMovies();
         //assert
@@ -49,13 +44,13 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void AddMovie_WhenAddMovieIsInvoked_ThenTheMovieIsAdded()
+    public void AddMovie_WhenCalled_ThenMovieIsAdded()
     {
         //arrange
         //act
         _movieService.AddMovie(_movieDto);
         //assert
-        Movie? addedMovie = _movieRepository.GetAll().FirstOrDefault(m => m.Title == _movieDto.Title);
+        Movie? addedMovie = _movieRepository.GetMovies().FirstOrDefault(m => m.Title == _movieDto.Title);
         Assert.IsNotNull(addedMovie);
         Assert.AreEqual(_movieDto.Title, addedMovie.Title);
         Assert.AreEqual(_movieDto.Director, addedMovie.Director);
@@ -65,7 +60,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddMovie_WhenAddTheSameMovieTwice_ThenThrowException()
+    public void AddMovie_WhenCalledTwiceWithTheSameMovie_ThenThrowsException()
     {
         //arrange
         //act
@@ -76,7 +71,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void GetMovie_WhenGetAnUndefinedMovie_ThenThrowException()
+    public void GetMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -85,10 +80,10 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovie_WhenGetAValidMovie_ThenTheMovieIsReturned()
+    public void GetMovie_WhenCalled_ThenMovieIsReturned()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         MovieDTO result = _movieService.GetMovie(_movie.Title);
         //assert
@@ -100,7 +95,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void DeleteMovie_WhenDeleteAnUndefinedMovie_ThenThrowException()
+    public void DeleteMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -109,19 +104,19 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void DeleteMovie_WhenDeleteAValidMovie_ThenTheMovieIsDeleted()
+    public void DeleteMovie_WhenCalled_ThenMovieIsDeleted()
     {
         //arrange
-        _movieRepository.Add(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         _movieService.DeleteMovie(_movie.Title);
         //assert
-        Assert.AreEqual(0, _movieRepository.GetAll().Count);
+        Assert.AreEqual(0, _movieRepository.GetMovies().Count);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void UpdateMovie_WhenUpdateAnInvalidMovie_ThenThrowException()
+    public void UpdateMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -130,7 +125,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void UpdateMovie_WhenUpdateAValidMovie_ThenTheMovieIsUpdated()
+    public void UpdateMovie_WhenCalled_ThenMovieIsUpdated()
     {
         //arrange
         _movieService.AddMovie(_movieDto);
@@ -139,7 +134,7 @@ public class MovieServiceTests
         //act
         _movieService.UpdateMovie(_movieDto);
         //assert
-        Movie updatedMovie = _movieRepository.GetAll().First();
+        Movie updatedMovie = _movieRepository.GetMovies().First();
         Assert.AreEqual("New Director", updatedMovie.Director);
         Assert.AreEqual(new DateTime(2000, 1, 1), updatedMovie.ReleaseDate);
     }

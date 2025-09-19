@@ -24,13 +24,7 @@ public class SessionServiceTests
         _userService = new UserService(_userRepository);
         _sessionService = new SessionService(_userRepository);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
-        _userDto = new UserDTO();
-        _userDto.Id = 1;
-        _userDto.Name = "Tim";
-        _userDto.LastName = "Robbins";
-        _userDto.Email = "timrobbins@email.com";
-        _userDto.Password = "123456";
-        _userDto.Role = "User";
+        _userDto = new UserDTO(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
     }
 
     [TestCleanup]
@@ -38,19 +32,19 @@ public class SessionServiceTests
     {
         _context.Database.EnsureDeleted();
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void Login_WhenLoginWithWrongCredentials_ThenThrowException()
+    public void Login_WhenCalledWithInvalidEmailOrPassword_ThenThrowsException()
     {
         //arrange
         //act
         _sessionService.Login(_userDto.Email, _userDto.Password);
         //assert
     }
-    
+
     [TestMethod]
-    public void GetLoggedUser_WhenGetLoggedUserWithoutLogin_ThenLoggedUserIsNull()
+    public void GetLoggedUser_WhenCalledWithUserNotLoggedIn_ThenLoggedUserIsNull()
     {
         //arrange
         //act
@@ -58,12 +52,12 @@ public class SessionServiceTests
         //assert
         Assert.IsNull(loggedUser);
     }
-    
+
     [TestMethod]
-    public void GetLoggedUser_WhenGetLoggedUserAfterLoginOk_ThenLoggedUserIsNotNull()
+    public void GetLoggedUser_WhenCalledWithUserLoggedIn_ThenLoggedUserIsNotNull()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         UserDTO loggedUser = _sessionService.GetLoggedUser();
@@ -74,12 +68,12 @@ public class SessionServiceTests
         Assert.AreEqual(_user.Email, loggedUser.Email);
         Assert.AreEqual(_user.Role, loggedUser.Role);
     }
-    
+
     [TestMethod]
-    public void Logout_WhenGetLoggedUserAfterSessionLogout_ThenLoggedUserIsNull()
+    public void Logout_WhenCalledAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         _sessionService.Logout();
