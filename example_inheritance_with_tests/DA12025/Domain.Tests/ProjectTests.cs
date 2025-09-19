@@ -4,7 +4,7 @@
 public class ProjectTests
 {
     [TestMethod]
-    public void NewProject_WhenConstructorHasValidData_ThenProjectIsCreated()
+    public void CreateNewProject_WhenConstructorHasValidData_ThenProjectIsCreated()
     {
         //arrange
         Project project;
@@ -16,7 +16,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenNameIsNull_ThenThrowsException()
+    public void CreateNewProject_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -26,7 +26,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenNameIsEmpty_ThenThrowsException()
+    public void CreateNewProject_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -35,7 +35,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
+    public void CreateNewProject_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         Project project;
@@ -47,7 +47,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenBudgetIsCeroOrNegative_ThenThrowsException()
+    public void CreateNewProject_WhenBudgetIsCeroOrNegative_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -56,7 +56,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenBudgetIsPositive_ThenBudgetIsAssigned()
+    public void CreateNewProject_WhenBudgetIsPositive_ThenBudgetIsAssigned()
     {
         //arrange
         Project project;
@@ -67,7 +67,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewProject_WhenStartDateIsAfterToday_ThenThrowsException()
+    public void CreateNewProject_WhenStartDateIsAfterToday_ThenThrowsException()
     {
         //arrange
         Project project;
@@ -76,7 +76,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenStartDateIsEarlierThanToday_ThenStartDateIsAssigned()
+    public void CreateNewProject_WhenStartDateIsEarlierThanToday_ThenStartDateIsAssigned()
     {
         //arrange
         Project project;
@@ -85,7 +85,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void NewProject_WhenAddingContributors_ThenStaffListIsNotEmpty()
+    public void CreateNewProject_WhenAddingContributors_ThenStaffListIsPopulated()
     {
         //arrange
         Project project = new Project("Software Upgrade", 25000, new DateTime(2025, 01, 14));
@@ -102,7 +102,7 @@ public class ProjectTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void ShowContributorsSalary_WhenCalledWithNoContributorsOnAProject_ThenThrowsException()
+    public void ShowContributorsSalary_WhenCalledWithNoContributors_ThenThrowsException()
     {
         //arrange
         Project project = new Project("Software Upgrade", 15000, new DateTime(2022, 09, 01));
@@ -111,7 +111,7 @@ public class ProjectTests
     }
 
     [TestMethod]
-    public void ShowContributorsSalary_WhenCalledWithContributorsOnAProject_ThenProyectDetailsAndSalaryIsShowed()
+    public void ShowContributorsSalary_WhenCalled_ThenProjectDetailsAreDisplayed()
     {
         //arrange
         Project project = new Project("Software Libraries Upgrade", 35000, new DateTime(2025, 04, 10));

@@ -4,7 +4,7 @@
 public class ContractorTests
 {
     [TestMethod]
-    public void NewContractor_WhenConstructorHasValidData_ThenContractorIsCreated()
+    public void CreateNewContractor_WhenConstructorHasValidData_ThenContractorIsCreated()
     {
         //arrange
         Contractor contractor;
@@ -16,7 +16,7 @@ public class ContractorTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewContractor_WhenNameIsNull_ThenThrowsException()
+    public void CreateNewContractor_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         Contractor contractor;
@@ -26,7 +26,7 @@ public class ContractorTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewContractor_WhenNameIsEmpty_ThenThrowsException()
+    public void CreateNewContractor_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         Contractor contractor;
@@ -35,7 +35,7 @@ public class ContractorTests
     }
 
     [TestMethod]
-    public void NewContractor_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
+    public void CreateNewContractor_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         Contractor contractor;
@@ -47,7 +47,7 @@ public class ContractorTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewContractor_WhenAgeIsBelowEighteen_ThenThrowsException()
+    public void CreateNewContractor_WhenAgeIsBelowEighteen_ThenThrowsException()
     {
         //arrange
         Contractor contractor;
@@ -56,7 +56,7 @@ public class ContractorTests
     }
 
     [TestMethod]
-    public void NewContractor_WhenAgeIsAboveEighteen_ThenAgeIsAssigned()
+    public void CreateNewContractor_WhenAgeIsAboveOrEqualToEighteen_ThenAgeIsAssigned()
     {
         //arrange
         Contractor contractor;
@@ -68,7 +68,7 @@ public class ContractorTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewContractor_WhenBaseSalaryIsCeroOrNegative_ThenThrowsException()
+    public void CreateNewContractor_WhenBaseSalaryIsCeroOrNegative_ThenThrowsException()
     {
         //arrange
         Contractor contractor;
@@ -77,7 +77,7 @@ public class ContractorTests
     }
 
     [TestMethod]
-    public void NewContractor_WhenBaseSalaryIsAboveCero_ThenBaseSalaryIsAssigned()
+    public void CreateNewContractor_WhenBaseSalaryIsAboveCero_ThenBaseSalaryIsAssigned()
     {
         //arrange
         Contractor contractor;
@@ -89,7 +89,7 @@ public class ContractorTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewContractor_WhenHourlyRateIsCeroOrNegative_ThenThrowsException()
+    public void CreateNewContractor_WhenHourlyRateIsCeroOrNegative_ThenThrowsException()
     {
         //arrange
         Contractor contractor;
@@ -98,7 +98,7 @@ public class ContractorTests
     }
 
     [TestMethod]
-    public void NewContractor_WhenHourlyRateIsAboveCero_ThenHourlyRateIsAssigned()
+    public void CreateNewContractor_WhenHourlyRateIsAboveCero_ThenHourlyRateIsAssigned()
     {
         //arrange
         Contractor contractor;
@@ -109,7 +109,7 @@ public class ContractorTests
     }
 
     [TestMethod]
-    public void NewContractor_WhenWorkedHoursAreGiven_ThenWorkedHoursAreAssigned()
+    public void CreateNewContractor_WhenWorkedHoursAreGiven_ThenWorkedHoursAreAssigned()
     {
         //arrange
         Contractor contractor;

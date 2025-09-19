@@ -4,7 +4,7 @@ namespace Domain.Tests;
 public class EmployeeTests
 {
     [TestMethod]
-    public void NewEmployee_WhenConstructorHasValidData_ThenEmployeeIsCreated()
+    public void CreateNewEmployee_WhenConstructorHasValidData_ThenEmployeeIsCreated()
     {
         //arrange
         Employee employee;
@@ -16,7 +16,7 @@ public class EmployeeTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewEmployee_WhenNameIsNull_ThenThrowsException()
+    public void CreateNewEmployee_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         Employee employee;
@@ -26,7 +26,7 @@ public class EmployeeTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewEmployee_WhenNameIsEmpty_ThenThrowsException()
+    public void CreateNewEmployee_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         Employee employee;
@@ -35,7 +35,7 @@ public class EmployeeTests
     }
 
     [TestMethod]
-    public void NewEmployee_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
+    public void CreateNewEmployee_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         Employee employee;
@@ -47,7 +47,7 @@ public class EmployeeTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewEmployee_WhenAgeIsBelowEighteen_ThenThrowsException()
+    public void CreateNewEmployee_WhenAgeIsBelowEighteen_ThenThrowsException()
     {
         //arrange
         Employee employee;
@@ -56,7 +56,7 @@ public class EmployeeTests
     }
 
     [TestMethod]
-    public void NewEmployee_WhenAgeIsAboveEighteen_ThenAgeIsAssigned()
+    public void CreateNewEmployee_WhenAgeIsAboveOrEqualToEighteen_ThenAgeIsAssigned()
     {
         //arrange
         Employee employee;
@@ -68,7 +68,7 @@ public class EmployeeTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void NewEmployee_WhenBaseSalaryIsCeroOrNegative_ThenThrowsException()
+    public void CreateNewEmployee_WhenBaseSalaryIsCeroOrNegative_ThenThrowsException()
     {
         //arrange
         Employee employee;
@@ -77,7 +77,7 @@ public class EmployeeTests
     }
 
     [TestMethod]
-    public void NewEmployee_WhenBaseSalaryIsAboveCero_ThenBaseSalaryIsAssigned()
+    public void CreateNewEmployee_WhenBaseSalaryIsAboveCero_ThenBaseSalaryIsAssigned()
     {
         //arrange
         Employee employee;
@@ -88,7 +88,7 @@ public class EmployeeTests
     }
 
     [TestMethod]
-    public void NewEmployee_WhenAnualBondIsGiven_ThenAnualBondIsAssigned()
+    public void CreateNewEmployee_WhenAnualBondIsGiven_ThenAnualBondIsAssigned()
     {
         //arrange
         Employee employee;
