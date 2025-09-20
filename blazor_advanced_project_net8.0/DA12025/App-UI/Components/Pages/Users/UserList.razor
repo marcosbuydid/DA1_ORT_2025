@@ -29,7 +29,12 @@
             <td>@user.Email</td>
             <td>@user.Role</td>
             <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button></td>
-            <td><button type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)">Delete</button></td>
+            <td>
+                <button
+                    type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)"
+                    disabled="@ValidateDeleteButtonState()">Delete
+                </button>
+            </td>
         </tr>
     }
     </tbody>
@@ -56,6 +61,11 @@
     {
         selectedUserEmail = email;
         NavigationManager.NavigateTo("/update-user/" + selectedUserEmail);
+    }
+
+    private bool ValidateDeleteButtonState()
+    {
+        return users.Count < 2;
     }
 
 }
