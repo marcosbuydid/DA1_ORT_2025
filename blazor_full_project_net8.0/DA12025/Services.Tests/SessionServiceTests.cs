@@ -23,7 +23,7 @@ public class SessionServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void Login_WhenLoginWithWrongCredentials_ThenThrowException()
+    public void Login_WhenCalledWithInvalidEmailOrPassword_ThenThrowsException()
     {
         //arrange
         //act
@@ -32,7 +32,7 @@ public class SessionServiceTests
     }
 
     [TestMethod]
-    public void GetLoggedUser_WhenGetLoggedUserWithoutLogin_ThenLoggedUserIsNull()
+    public void GetLoggedUser_WhenCalledWithUserNotLoggedIn_ThenLoggedUserIsNull()
     {
         //arrange
         //act
@@ -42,7 +42,7 @@ public class SessionServiceTests
     }
 
     [TestMethod]
-    public void GetLoggedUser_WhenGetLoggedUserAfterLoginOk_ThenLoggedUserIsNotNull()
+    public void GetLoggedUser_WhenCalledWithUserLoggedIn_ThenLoggedUserIsNotNull()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();
@@ -59,7 +59,7 @@ public class SessionServiceTests
     }
 
     [TestMethod]
-    public void Logout_WhenGetLoggedUserAfterSessionLogout_ThenLoggedUserIsNull()
+    public void Logout_WhenCalledAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();

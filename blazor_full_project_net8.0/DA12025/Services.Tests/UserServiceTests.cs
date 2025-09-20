@@ -23,7 +23,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddUser_WhenAddAUserTwice_ThenThrowException()
+    public void AddUser_WhenCalledTwiceWithTheSameUser_ThenThrowsException()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();
@@ -34,7 +34,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void AddUser_WhenAddAUser_ThenReturnSuccessfully()
+    public void AddUser_WhenCalled_ThenUserIsAdded()
     {
         //arrange
         //act
@@ -47,7 +47,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void GetUser_WhenGetAnUndefinedUser_ThenThrowException()
+    public void GetUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -56,7 +56,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUser_WhenGetAnExistentUser_ThenUserIsReturned()
+    public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
         _inMemoryDatabase.AddUser(_user);
@@ -70,7 +70,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUsers_WhenGetAllUsersAndThereAreNoUsers_ThenNoUsersAreReturned()
+    public void GetUsers_WhenCalledWithNoUsersCreated_ThenNoUsersAreReturned()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();
@@ -81,7 +81,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUsers_WhenGetAllUsersAndThereAreSomeUsers_ThenAllUsersAreReturned()
+    public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();
@@ -94,7 +94,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void DeleteUser_WhenDeleteAnUndefinedUser_ThenThrowException()
+    public void DeleteUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -103,7 +103,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void DeleteUser_WhenDeleteAnExistentUser_ThenReturnSuccessfully()
+    public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();
@@ -116,7 +116,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void UpdateUser_WhenUpdateAnUndefinedUser_ThenThrowException()
+    public void UpdateUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -125,7 +125,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void UpdateUser_WhenUpdateAUser_ThenReturnSuccessfully()
+    public void UpdateUser_WhenCalled_ThenUserIsUpdated()
     {
         //arrange
         _inMemoryDatabase.GetUsers().Clear();

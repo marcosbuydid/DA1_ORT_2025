@@ -23,7 +23,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddMovie_WhenAddAMovieTwice_ThenThrowException()
+    public void AddMovie_WhenCalledTwiceWithTheSameMovie_ThenThrowsException()
     {
         //arrange
         _inMemoryDatabase.GetMovies().Clear();
@@ -34,7 +34,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void AddMovie_WhenAddAMovie_ThenReturnSuccessfully()
+    public void AddMovie_WhenCalled_ThenMovieIsAdded()
     {
         //arrange
         //act
@@ -47,7 +47,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void GetMovie_WhenGetAnUndefinedMovie_ThenThrowException()
+    public void GetMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -56,7 +56,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovie_WhenGetAnExistentMovie_ThenTheMovieIsReturned()
+    public void GetMovie_WhenCalled_ThenMovieIsReturned()
     {
         //arrange
         _inMemoryDatabase.AddMovie(_movie);
@@ -69,7 +69,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovies_WhenGetAllMoviesAndThereAreNoMovies_ThenNoMoviesAreReturned()
+    public void GetMovies_WhenCalledWithNoMoviesCreated_ThenNoMoviesAreReturned()
     {
         //arrange
         _inMemoryDatabase.GetMovies().Clear();
@@ -80,7 +80,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void GetMovies_WhenGetAllMovies_ThenAllMoviesAreReturned()
+    public void GetMovies_WhenCalled_ThenMoviesAreReturned()
     {
         //arrange
         _inMemoryDatabase.GetMovies().Clear();
@@ -93,7 +93,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void DeleteMovie_WhenDeleteAnUndefinedMovie_ThenThrowException()
+    public void DeleteMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -102,7 +102,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void DeleteMovie_WhenDeleteAnExistentMovie_ThenReturnSuccessfully()
+    public void DeleteMovie_WhenCalled_ThenMovieIsDeleted()
     {
         //arrange
         _inMemoryDatabase.GetMovies().Clear();
@@ -115,7 +115,7 @@ public class MovieServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void UpdateMovie_WhenUpdateAnUndefinedMovie_ThenThrowException()
+    public void UpdateMovie_WhenCalledWithMovieThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -124,7 +124,7 @@ public class MovieServiceTests
     }
 
     [TestMethod]
-    public void UpdateMovie_WhenUpdateAMovie_ThenReturnSuccessfully()
+    public void UpdateMovie_WhenCalled_ThenMovieIsUpdated()
     {
         //arrange
         _inMemoryDatabase.GetMovies().Clear();
