@@ -23,13 +23,7 @@ public class UserServiceTests
         _userRepository = new UserRepository(_context);
         _userService = new UserService(_userRepository);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
-        _userDto = new UserDTO();
-        _userDto.Id = 1;
-        _userDto.Name = "Tim";
-        _userDto.LastName = "Robbins";
-        _userDto.Email = "timrobbins@email.com";
-        _userDto.Password = "123456";
-        _userDto.Role = "User";
+        _userDto = new UserDTO(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
     }
 
     [TestCleanup]
@@ -39,10 +33,10 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUsers_WhenGetUsersIsInvoked_ThenAllUsersAreReturned()
+    public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //act
         List<UserDTO> users = _userService.GetUsers();
         //assert
@@ -51,13 +45,13 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void AddUser_WhenAddUserIsInvoked_ThenTheUserIsAdded()
+    public void AddUser_WhenCalled_ThenUserIsAdded()
     {
         //arrange
         //act
         _userService.AddUser(_userDto);
         //assert
-        User? addedUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email == _userDto.Email);
+        User? addedUser = _userRepository.GetUsers().FirstOrDefault(u => u.Email == _userDto.Email);
         Assert.IsNotNull(addedUser);
         Assert.AreEqual(_userDto.Name, addedUser.Name);
         Assert.AreEqual(_userDto.LastName, addedUser.LastName);
@@ -68,7 +62,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void AddUser_WhenAddTheSameUserTwice_ThenThrowException()
+    public void AddUser_WhenCalledTwiceWithTheSameUser_ThenThrowsException()
     {
         //arrange
         //act
@@ -79,7 +73,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void GetUser_WhenGetAnUndefinedUser_ThenThrowException()
+    public void GetUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -88,10 +82,10 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void GetUser_WhenGetAValidUser_ThenTheUserIsReturned()
+    public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //act
         UserDTO result = _userService.GetUser(_user.Email);
         //assert
@@ -104,7 +98,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void DeleteUser_WhenDeleteAnUndefinedUser_ThenThrowException()
+    public void DeleteUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -113,19 +107,19 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void DeleteUser_WhenDeleteAValidUser_ThenTheUserIsDeleted()
+    public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //act
         _userService.DeleteUser(_user.Email);
         //assert
-        Assert.AreEqual(0, _userRepository.GetAllUsers().Count);
+        Assert.AreEqual(0, _userRepository.GetUsers().Count);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void UpdateMovie_WhenUpdateAnInvalidUser_ThenThrowException()
+    public void UpdateUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
@@ -134,7 +128,7 @@ public class UserServiceTests
     }
 
     [TestMethod]
-    public void UpdateUser_WhenUpdateAValidUser_ThenTheUserIsUpdated()
+    public void UpdateUser_WhenCalled_ThenUserIsUpdated()
     {
         //arrange
         _userService.AddUser(_userDto);
@@ -144,7 +138,7 @@ public class UserServiceTests
         //act
         _userService.UpdateUser(_userDto);
         //assert
-        User updatedUser = _userRepository.GetAllUsers().First();
+        User updatedUser = _userRepository.GetUsers().First();
         Assert.AreEqual("New Name", updatedUser.Name);
         Assert.AreEqual("New LastName", updatedUser.LastName);
         Assert.AreEqual("New Role", updatedUser.Role);

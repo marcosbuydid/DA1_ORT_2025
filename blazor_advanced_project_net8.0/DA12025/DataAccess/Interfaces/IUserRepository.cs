@@ -4,9 +4,9 @@ namespace DataAccess.Interfaces;
 
 public interface IUserRepository
 {
-    List<User> GetAllUsers();
-    User? Get(Func<User, bool> filter);
-    void Add(User user);
-    void Update(User user);
-    void Delete(User user);
+    List<User> GetUsers();
+    User? GetUser(Func<User, bool> filter);
+    void AddUser(User user);
+    void UpdateUser(User user);
+    void DeleteUser(User user);
 }

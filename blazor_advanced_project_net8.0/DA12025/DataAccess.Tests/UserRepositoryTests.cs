@@ -30,44 +30,44 @@ public class UserRepositoryTests
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Add_WhenAddIsInvokedWithAnEmptyUser_ThenThrowException()
+    public void AddUser_WhenCalledWithEmptyUser_ThenThrowsException()
     {
         //arrange
         //act
-        _userRepository.Add(new User());
+        _userRepository.AddUser(new User());
     }
 
     [TestMethod]
-    public void Add_WhenAddIsInvoked_ThenTheUserIsAdded()
+    public void AddUser_WhenCalled_ThenUserIsAdded()
     {
         //arrange
         //act
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //assert
-        IList<User> users = _userRepository.GetAllUsers();
+        List<User> users = _userRepository.GetUsers();
         Assert.AreEqual(1, users.Count);
         Assert.AreEqual("timrobbins@email.com", users[0].Email);
     }
 
     [TestMethod]
-    public void GetAll_WhenGetAllIsInvoked_ThenAllUsersAreReturned()
+    public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
-        _userRepository.Add(_user);
-        _userRepository.Add(_user_two);
+        _userRepository.AddUser(_user);
+        _userRepository.AddUser(_user_two);
         //act
-        IList<User> users = _userRepository.GetAllUsers();
+        List<User> users = _userRepository.GetUsers();
         //assert
         Assert.AreEqual(2, users.Count);
     }
 
     [TestMethod]
-    public void Get_WhenGetIsInvoked_ThenTheUserIsReturned()
+    public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //act
-        User? result = _userRepository.Get(u => u.Id == 1);
+        User? result = _userRepository.GetUser(u => u.Id == 1);
         //assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Id);
@@ -80,50 +80,50 @@ public class UserRepositoryTests
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Delete_WhenDeleteIsInvokedAndUserNotExist_ThenThrowException()
+    public void DeleteUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         User aUser = new User(991, "Unknown", "Unknown", "email", "123", "User");
         //act
-        _userRepository.Delete(_user);
+        _userRepository.DeleteUser(_user);
     }
 
     [TestMethod]
-    public void Delete_WhenDeleteIsInvoked_ThenTheUserIsRemoved()
+    public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         //act
-        _userRepository.Delete(_user);
+        _userRepository.DeleteUser(_user);
         //assert
-        IList<User> result = _userRepository.GetAllUsers();
+        List<User> result = _userRepository.GetUsers();
         Assert.AreEqual(0, result.Count);
     }
 
     [TestMethod]
     [ExpectedException(typeof(DbUpdateException))]
-    public void Update_WhenUpdateIsInvokedWithADetachedUser_ThenThrowException()
+    public void UpdateUser_WhenCalledWithDetachedUser_ThenThrowsException()
     {
         //arrange
-        User aUser = new User(991, "Unknown", "Unknown", "email", "123", "User");
         //we simulate the movie is not tracked
+        User aUser = new User(991, "Unknown", "Unknown", "email", "123", "User");
         //act
-        _userRepository.Update(aUser);
-        //it tries to update an object is not in the context
+        //it tries to update an object that`s not in the context
+        _userRepository.UpdateUser(aUser);
     }
 
     [TestMethod]
-    public void Update_WhenUpdateIsInvoked_ThenTheUserIsUpdated()
+    public void UpdateUser_WhenCalled_ThenUserIsUpdated()
     {
         //arrange
-        _userRepository.Add(_user);
+        _userRepository.AddUser(_user);
         _user.Name = "Updated Name";
         _user.LastName = "Updated LastName";
         _user.Role = "Updated Role";
         //act
-        _userRepository.Update(_user);
+        _userRepository.UpdateUser(_user);
         //assert
-        User? userUpdated = _userRepository.Get(u => u.Id == 1);
+        User? userUpdated = _userRepository.GetUser(u => u.Id == 1);
         Assert.AreEqual("Updated Name", userUpdated.Name);
         Assert.AreEqual("Updated LastName", userUpdated.LastName);
         Assert.AreEqual("Updated Role", userUpdated.Role);

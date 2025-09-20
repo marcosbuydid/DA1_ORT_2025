@@ -21,16 +21,14 @@ public class SessionService : ISessionService
 
     public void Login(string email, string password)
     {
-        if (LoggedUser.Current == null)
-        {
-            User? user = _userRepository.Get(user => user.Email == email && user.Password == password);
-            if (user == null)
-            {
-                throw new ArgumentException("User or password is incorrect, try again");
-            }
+        if (LoggedUser.Current != null) return;
 
-            LoggedUser.Current = FromEntity(user);
-        }
+        User? user =
+            _userRepository.GetUsers().FirstOrDefault(user => user.Email == email && user.Password == password);
+
+        LoggedUser.Current = user != null
+            ? FromEntity(user)
+            : throw new ArgumentException("User or password is incorrect, try again");
     }
 
     public void Logout()

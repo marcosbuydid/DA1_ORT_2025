@@ -4,7 +4,7 @@
 public class MovieTests
 {
     [TestMethod]
-    public void CreateNewMovie_WhenIdIsNotNull_ThenIdShouldBeAssigned()
+    public void CreateNewMovie_WhenIdIsNotNull_ThenIdIsAssigned()
     {
         //arrange
         Movie movie;
@@ -16,7 +16,7 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenTitleIsNull_ThenThrowException()
+    public void CreateNewMovie_WhenTitleIsNull_ThenThrowsException()
     {
         //arrange
         Movie movie;
@@ -27,7 +27,7 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenTitleIsEmpty_ThenThrowException()
+    public void CreateNewMovie_WhenTitleIsEmpty_ThenThrowsException()
     {
         //arrange
         Movie movie;
@@ -37,7 +37,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenTitleIsNotNullOrEmpty_ThenTitleShouldBeAssigned()
+    public void CreateNewMovie_WhenTitleIsNotNullOrEmpty_ThenTitleIsAssigned()
     {
         //arrange
         Movie movie;
@@ -49,7 +49,7 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenDirectorIsNull_ThenThrowException()
+    public void CreateNewMovie_WhenDirectorIsNull_ThenThrowsException()
     {
         //arrange
         Movie movie;
@@ -60,7 +60,7 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenDirectorIsEmpty_ThenThrowException()
+    public void CreateNewMovie_WhenDirectorIsEmpty_ThenThrowsException()
     {
         //arrange
         Movie movie;
@@ -70,7 +70,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenDirectorIsNotNullOrEmpty_ThenDirectorShouldBeAssigned()
+    public void CreateNewMovie_WhenDirectorIsNotNullOrEmpty_ThenDirectorIsAssigned()
     {
         //arrange
         Movie movie;
@@ -81,7 +81,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenReleaseDateIsEarlierThanToday_ThenReleaseDateShouldBeAssigned()
+    public void CreateNewMovie_WhenReleaseDateIsEarlierThanToday_ThenReleaseDateIsAssigned()
     {
         //arrange
         Movie movie;
@@ -93,7 +93,7 @@ public class MovieTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewMovie_WhenBudgetIsNegative_ThenThrowException()
+    public void CreateNewMovie_WhenBudgetIsNegative_ThenThrowsException()
     {
         //arrange
         Movie movie;
@@ -103,7 +103,7 @@ public class MovieTests
     }
 
     [TestMethod]
-    public void CreateNewMovie_WhenBudgetIsPositive_ThenBudgetShouldBeAssigned()
+    public void CreateNewMovie_WhenBudgetIsPositive_ThenBudgetIsAssigned()
     {
         //arrange
         Movie movie;

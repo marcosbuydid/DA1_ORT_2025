@@ -82,7 +82,7 @@ public class UserService : IUserService
 
     private static User ToEntity(UserDTO userDTO)
     {
-        return new User(userDTO.Id, userDTO.Name, userDTO.LastName, userDTO.Email, userDTO.Password, userDTO.Role) { };
+        return new User(userDTO.Id, userDTO.Name, userDTO.LastName, userDTO.Email, userDTO.Password, userDTO.Role);
     }
 
     private static UserDTO FromEntity(User user)

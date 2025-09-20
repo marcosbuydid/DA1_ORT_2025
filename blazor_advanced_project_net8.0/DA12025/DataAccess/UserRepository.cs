@@ -6,24 +6,24 @@ namespace DataAccess;
 
 public class UserRepository : IUserRepository
 {
-    protected readonly AppDbContext _appDbContext;
+    private readonly AppDbContext _appDbContext;
 
     public UserRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
     }
 
-    public List<User> GetAllUsers()
+    public List<User> GetUsers()
     {
         return _appDbContext.Set<User>().AsQueryable<User>().ToList();
     }
 
-    public User? Get(Func<User, bool> filter)
+    public User? GetUser(Func<User, bool> filter)
     {
         return _appDbContext.Set<User>().FirstOrDefault(filter);
     }
 
-    public void Add(User user)
+    public void AddUser(User user)
     {
         try
         {
@@ -32,25 +32,25 @@ public class UserRepository : IUserRepository
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot add the user to database", e);
         }
     }
 
-    public void Update(User user)
+    public void UpdateUser(User user)
     {
         try
         {
             _appDbContext.Update(user);
-            _appDbContext.Entry<User>(user).State = EntityState.Modified;
+            _appDbContext.Entry(user).State = EntityState.Modified;
             _appDbContext.SaveChanges();
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot update the user", e);
         }
     }
 
-    public void Delete(User user)
+    public void DeleteUser(User user)
     {
         try
         {
@@ -59,7 +59,7 @@ public class UserRepository : IUserRepository
         }
         catch (DbUpdateException e)
         {
-            throw new DbUpdateException(e.Message);
+            throw new DbUpdateException("Cannot delete the user", e);
         }
     }
 }
