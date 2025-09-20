@@ -118,7 +118,7 @@ public class UserServiceTests
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void UpdateMovie_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
+    public void UpdateUser_WhenCalledWithUserThatDoesNotExist_ThenThrowsException()
     {
         //arrange
         //act
