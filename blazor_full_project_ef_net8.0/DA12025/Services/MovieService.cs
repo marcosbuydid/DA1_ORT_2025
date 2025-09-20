@@ -68,7 +68,7 @@ namespace Services
             return FromEntity(movie);
         }
 
-        private void ValidateUniqueTitle(String title)
+        private void ValidateUniqueTitle(string title)
         {
             foreach (var movie in _movieRepository.GetMovies())
             {
@@ -81,7 +81,7 @@ namespace Services
 
         private static Movie ToEntity(MovieDTO movieDTO)
         {
-            return new Movie(movieDTO.Id, movieDTO.Title, movieDTO.Director, movieDTO.ReleaseDate, movieDTO.Budget) { };
+            return new Movie(movieDTO.Id, movieDTO.Title, movieDTO.Director, movieDTO.ReleaseDate, movieDTO.Budget);
         }
 
         private static MovieDTO FromEntity(Movie movie)

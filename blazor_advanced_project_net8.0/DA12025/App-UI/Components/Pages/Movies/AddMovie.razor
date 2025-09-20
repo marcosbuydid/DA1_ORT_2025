@@ -47,11 +47,7 @@
 
     protected override void OnInitialized()
     {
-        movieDTO = new MovieDTO();
-        movieDTO.Title = "";
-        movieDTO.Director = "";
-        movieDTO.ReleaseDate = DateTime.Now;
-        movieDTO.Budget = 0;
+        movieDTO = new MovieDTO(null,"","",DateTime.Now,0);
     }
 
     private void OnSubmit()

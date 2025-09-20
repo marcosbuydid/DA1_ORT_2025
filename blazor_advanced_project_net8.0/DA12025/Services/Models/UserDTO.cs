@@ -20,4 +20,18 @@ public class UserDTO
 
     [Required(ErrorMessage = "Role is required.")]
     public string Role { get; set; }
+
+    public UserDTO()
+    {
+    }
+
+    public UserDTO(int? id, string name, string lastName, string email, string password, string role)
+    {
+        Id = id;
+        Name = name;
+        LastName = lastName;
+        Email = email;
+        Password = password;
+        Role = role;
+    }
 }

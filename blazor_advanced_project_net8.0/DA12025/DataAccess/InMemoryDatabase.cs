@@ -5,8 +5,8 @@ namespace DataAccess
 {
     public class InMemoryDatabase : IMovieRepository, IUserRepository
     {
-        private List<Movie> Movies { get; set; }
-        private List<User> Users { get; set; }
+        private List<Movie> Movies { get; }
+        private List<User> Users { get; }
 
         public InMemoryDatabase()
         {
@@ -28,22 +28,22 @@ namespace DataAccess
             Users.Add(new User(null, "Marcos", "Buydid", "marcosb@email.com", "123456", "Administrator"));
         }
 
-        public List<Movie> GetAllMovies()
+        public List<Movie> GetMovies()
         {
             return Movies;
         }
 
-        public Movie? Get(Func<Movie, bool> filter)
+        public Movie? GetMovie(Func<Movie, bool> filter)
         {
             return Movies.Where(filter).FirstOrDefault();
         }
 
-        public void Add(Movie movie)
+        public void AddMovie(Movie movie)
         {
             Movies.Add(movie);
         }
 
-        public void Update(Movie movieToUpdate)
+        public void UpdateMovie(Movie movieToUpdate)
         {
             Movie? movie = Movies.Find(m => m.Title == movieToUpdate.Title);
             var movieToUpdateIndex = Movies.IndexOf(movie);
@@ -51,27 +51,27 @@ namespace DataAccess
             Movies[movieToUpdateIndex] = movieToUpdate;
         }
 
-        public void Delete(Movie movie)
+        public void DeleteMovie(Movie movie)
         {
             Movies.Remove(movie);
         }
 
-        public List<User> GetAllUsers()
+        public List<User> GetUsers()
         {
             return Users;
         }
 
-        public User? Get(Func<User, bool> filter)
+        public User? GetUser(Func<User, bool> filter)
         {
             return Users.Where(filter).FirstOrDefault();
         }
 
-        public void Add(User user)
+        public void AddUser(User user)
         {
             Users.Add(user);
         }
 
-        public void Update(User userToUpdate)
+        public void UpdateUser(User userToUpdate)
         {
             User? user = Users.Find(u => u.Email == userToUpdate.Email);
             var userToUpdateIndex = Users.IndexOf(user);
@@ -79,7 +79,7 @@ namespace DataAccess
             Users[userToUpdateIndex] = userToUpdate;
         }
 
-        public void Delete(User user)
+        public void DeleteUser(User user)
         {
             Users.Remove(user);
         }

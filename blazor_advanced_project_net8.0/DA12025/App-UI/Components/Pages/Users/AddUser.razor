@@ -53,12 +53,7 @@
 
     protected override void OnInitialized()
     {
-        userDTO = new UserDTO();
-        userDTO.Name = "";
-        userDTO.LastName = "";
-        userDTO.Email = "";
-        userDTO.Password = "";
-        userDTO.Role = "";
+        userDTO = new UserDTO(null,"","","","","");
     }
 
     private void OnSubmit()
