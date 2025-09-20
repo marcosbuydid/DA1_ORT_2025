@@ -4,7 +4,7 @@
 public class UserTests
 {
     [TestMethod]
-    public void NewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
+    public void CreateNewUser_WhenConstructorIsNotEmpty_ThenUserIsCreated()
     {
         //arrange
         User user;
@@ -13,10 +13,10 @@ public class UserTests
         //assert
         Assert.IsNotNull(user);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenNameIsNull_ThenThrowException()
+    public void CreateNewUser_WhenNameIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -24,10 +24,10 @@ public class UserTests
         user = new User(null, "Williams", "nickwilliams@email.com", "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenNameIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenNameIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -35,9 +35,9 @@ public class UserTests
         user = new User("", "Williams", "nickwilliams@email.com", "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
-    public void CreateNewUser_WhenNameIsNotNullOrEmpty_ThenNameShouldBeAssigned()
+    public void CreateNewUser_WhenNameIsNotNullOrEmpty_ThenNameIsAssigned()
     {
         //arrange
         User user;
@@ -46,10 +46,10 @@ public class UserTests
         //assert
         Assert.AreEqual("Nick", user.Name);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenLastNameIsNull_ThenThrowException()
+    public void CreateNewUser_WhenLastNameIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -57,10 +57,10 @@ public class UserTests
         user = new User("Nick", null, "nickwilliams@email.com", "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenLastNameIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenLastNameIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -68,9 +68,9 @@ public class UserTests
         user = new User("Nick", "", "nickwilliams@email.com", "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
-    public void CreateNewUser_WhenLastNameIsNotNullOrEmpty_ThenLastNameShouldBeAssigned()
+    public void CreateNewUser_WhenLastNameIsNotNullOrEmpty_ThenLastNameIsAssigned()
     {
         //arrange
         User user;
@@ -79,10 +79,10 @@ public class UserTests
         //assert
         Assert.AreEqual("Williams", user.LastName);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenEmailIsNull_ThenThrowException()
+    public void CreateNewUser_WhenEmailIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -90,10 +90,10 @@ public class UserTests
         user = new User("Nick", "Williams", null, "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenEmailIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenEmailIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -101,9 +101,9 @@ public class UserTests
         user = new User("Nick", "Williams", "", "p@assword", "User");
         //assert
     }
-    
+
     [TestMethod]
-    public void CreateNewUser_WhenEmailIsNotNullOrEmpty_ThenEmailShouldBeAssigned()
+    public void CreateNewUser_WhenEmailIsNotNullOrEmpty_ThenEmailIsAssigned()
     {
         //arrange
         User user;
@@ -112,10 +112,10 @@ public class UserTests
         //assert
         Assert.AreEqual("nickwilliams@email.com", user.Email);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenPasswordIsNull_ThenThrowException()
+    public void CreateNewUser_WhenPasswordIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -123,10 +123,10 @@ public class UserTests
         user = new User("Nick", "Williams", "nickwilliams@email.com", null, "User");
         //assert
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenPasswordIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenPasswordIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -134,9 +134,9 @@ public class UserTests
         user = new User("Nick", "Williams", "nickwilliams@email.com", "", "User");
         //assert
     }
-    
+
     [TestMethod]
-    public void CreateNewUser_WhenPasswordIsNotNullOrEmpty_ThenPasswordShouldBeAssigned()
+    public void CreateNewUser_WhenPasswordIsNotNullOrEmpty_ThenPasswordIsAssigned()
     {
         //arrange
         User user;
@@ -145,10 +145,10 @@ public class UserTests
         //assert
         Assert.AreEqual("p@assword", user.Password);
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenRoleIsNull_ThenThrowException()
+    public void CreateNewUser_WhenRoleIsNull_ThenThrowsException()
     {
         //arrange
         User user;
@@ -156,10 +156,10 @@ public class UserTests
         user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", null);
         //assert
     }
-    
+
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void CreateNewUser_WhenRoleIsEmpty_ThenThrowException()
+    public void CreateNewUser_WhenRoleIsEmpty_ThenThrowsException()
     {
         //arrange
         User user;
@@ -167,9 +167,9 @@ public class UserTests
         user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "");
         //assert
     }
-    
+
     [TestMethod]
-    public void CreateNewUser_WhenRoleIsNotNullOrEmpty_ThenRoleIsShouldBeAssigned()
+    public void CreateNewUser_WhenRoleIsNotNullOrEmpty_ThenRoleIsAssigned()
     {
         //arrange
         User user;
@@ -178,5 +178,4 @@ public class UserTests
         //assert
         Assert.AreEqual("User", user.Role);
     }
-    
 }
