@@ -4,6 +4,7 @@ using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
+using Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,12 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
-builder.Services.AddDbContextFactory<AppDbContext>(
-    options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        providerOptions => providerOptions.EnableRetryOnFailure())
+builder.Services.Configure<SystemSettings>(builder.Configuration.GetSection("SystemSettings"));
+builder.Services.AddScoped<SecureDataService>();
+
+builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    providerOptions => providerOptions.EnableRetryOnFailure())
 );
 
 var app = builder.Build();
