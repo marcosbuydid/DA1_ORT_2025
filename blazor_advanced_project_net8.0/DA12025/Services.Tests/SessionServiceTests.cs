@@ -1,7 +1,10 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using Domain;
+using Microsoft.Extensions.Options;
+using Services.Interfaces;
 using Services.Models;
+using Services.Settings;
 
 namespace Services.Tests;
 
@@ -11,8 +14,10 @@ public class SessionServiceTests
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private IUserRepository _userRepository;
-    private UserService _userService;
-    private SessionService _sessionService;
+    private ISessionService _sessionService;
+    private ISecureDataService _secureDataService;
+    private SystemSettings systemSettings;
+    private IOptions<SystemSettings> options;
     private User _user;
     private UserDTO _userDto;
 
@@ -22,8 +27,11 @@ public class SessionServiceTests
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
         _userRepository = new UserRepository(_context);
-        _userService = new UserService(_userRepository);
-        _sessionService = new SessionService(_userRepository);
+        systemSettings = new SystemSettings();
+        systemSettings.Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
+        options = Options.Create(systemSettings);
+        _secureDataService = new SecureDataService(options);
+        _sessionService = new SessionService(_userRepository, _secureDataService);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
         _userDto = new UserDTO(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
     }
@@ -58,8 +66,9 @@ public class SessionServiceTests
     public void GetLoggedUser_WhenCalledWithUserLoggedIn_ThenLoggedUserIsNotNull()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
-        _sessionService.Login(_user.Email, _user.Password);
+        _sessionService.Login(_userDto.Email, _userDto.Password);
         //act
         UserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
@@ -74,8 +83,9 @@ public class SessionServiceTests
     public void Logout_WhenCalledAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
-        _sessionService.Login(_user.Email, _user.Password);
+        _sessionService.Login(_userDto.Email, _userDto.Password);
         //act
         _sessionService.Logout();
         //assert

@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using DataAccess.Interfaces;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Tests;
@@ -8,7 +9,7 @@ public class MovieRepositoryTests
 {
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
-    private MovieRepository _movieRepository;
+    private IMovieRepository _movieRepository;
     private Movie _movie;
     private Movie _movie_two;
 

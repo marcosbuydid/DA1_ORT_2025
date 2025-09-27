@@ -22,7 +22,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
 builder.Services.Configure<SystemSettings>(builder.Configuration.GetSection("SystemSettings"));
-builder.Services.AddScoped<SecureDataService>();
+builder.Services.AddScoped<ISecureDataService, SecureDataService>();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection"),

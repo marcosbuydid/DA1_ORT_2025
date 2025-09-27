@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using DataAccess.Interfaces;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Tests;
@@ -8,7 +9,7 @@ public class UserRepositoryTests
 {
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
-    private UserRepository _userRepository;
+    private IUserRepository _userRepository;
     private User _user;
     private User _user_two;
 

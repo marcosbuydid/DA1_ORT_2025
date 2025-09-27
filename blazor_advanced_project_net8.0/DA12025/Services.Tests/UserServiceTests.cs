@@ -1,7 +1,10 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using Domain;
+using Microsoft.Extensions.Options;
+using Services.Interfaces;
 using Services.Models;
+using Services.Settings;
 
 namespace Services.Tests;
 
@@ -11,7 +14,10 @@ public class UserServiceTests
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private IUserRepository _userRepository;
-    private UserService _userService;
+    private IUserService _userService;
+    private ISecureDataService _secureDataService;
+    private SystemSettings systemSettings;
+    private IOptions<SystemSettings> options;
     private User _user;
     private UserDTO _userDto;
 
@@ -21,7 +27,11 @@ public class UserServiceTests
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
         _userRepository = new UserRepository(_context);
-        _userService = new UserService(_userRepository);
+        systemSettings = new SystemSettings();
+        systemSettings.Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
+        options = Options.Create(systemSettings);
+        _secureDataService = new SecureDataService(options);
+        _userService = new UserService(_userRepository,_secureDataService);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
         _userDto = new UserDTO(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
     }
@@ -36,6 +46,7 @@ public class UserServiceTests
     public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         List<UserDTO> users = _userService.GetUsers();
@@ -85,6 +96,7 @@ public class UserServiceTests
     public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         UserDTO result = _userService.GetUser(_user.Email);
@@ -110,6 +122,7 @@ public class UserServiceTests
     public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         _userService.DeleteUser(_user.Email);

@@ -8,15 +8,18 @@ namespace Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ISecureDataService _secureDataService;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, ISecureDataService secureDataService)
     {
         _userRepository = userRepository;
+        _secureDataService = secureDataService;
     }
 
     public void AddUser(UserDTO user)
     {
         ValidateUserEmail(user.Email);
+        user.Password = _secureDataService.Hash(user.Password);
         _userRepository.AddUser(ToEntity(user));
     }
 
