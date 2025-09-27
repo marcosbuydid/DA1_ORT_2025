@@ -4,6 +4,7 @@
 @using Services.Models
 
 @inject IUserService UserService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
 
 <h1>Add User</h1>
@@ -53,7 +54,14 @@
 
     protected override void OnInitialized()
     {
-        userDTO = new UserDTO(null,"","","","","");
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            userDTO = new UserDTO(null, "", "", "", "", "");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnSubmit()

@@ -4,6 +4,7 @@
 @using Services.Models
 
 @inject IMovieService MovieService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
 
 <h1>Add Movie</h1>
@@ -47,7 +48,14 @@
 
     protected override void OnInitialized()
     {
-        movieDTO = new MovieDTO(null,"","",DateTime.Now,0);
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            movieDTO = new MovieDTO(null, "", "", DateTime.Now, 0);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnSubmit()

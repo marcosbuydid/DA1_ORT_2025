@@ -4,6 +4,7 @@
 @using Services.Models
 
 @inject IMovieService MovieService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
 
 <h1>Movie List</h1>
@@ -42,8 +43,15 @@
 
     protected override void OnInitialized()
     {
-        movies = MovieService.GetMovies();
-        selectedMovieTitle = "";
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            movies = MovieService.GetMovies();
+            selectedMovieTitle = "";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnDelete(string title)

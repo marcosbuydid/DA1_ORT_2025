@@ -4,6 +4,7 @@
 @using Services.Models
 
 @inject IUserService UserService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
 
 <h1>User List</h1>
@@ -28,7 +29,9 @@
             <td>@user.LastName</td>
             <td>@user.Email</td>
             <td>@user.Role</td>
-            <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button></td>
+            <td>
+                <button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button>
+            </td>
             <td>
                 <button
                     type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)"
@@ -47,8 +50,15 @@
 
     protected override void OnInitialized()
     {
-        users = UserService.GetUsers();
-        selectedUserEmail = "";
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            users = UserService.GetUsers();
+            selectedUserEmail = "";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnDelete(string selectedUserEmail)
