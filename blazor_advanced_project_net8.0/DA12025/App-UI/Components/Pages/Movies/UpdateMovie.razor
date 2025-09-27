@@ -4,26 +4,26 @@
 @using Services.Models
 
 @inject IMovieService MovieService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
-
 
 <h1>Update Movie</h1>
 
 <EditForm Model="@movieDTO" OnValidSubmit="@(_ => OnUpdate(movieDTO))">
     <DataAnnotationsValidator/>
-    <div class="form-group">
+    <div class="form-group mb-xl-3">
         <label for="title">Títle</label>
-        <input type="text" class="form-control" id="title" @bind="movieDTO.Title" disabled/>
+        <input type="text" class="form-control mt-1" id="title" @bind="movieDTO.Title" disabled/>
         <ValidationMessage For="@(() => movieDTO.Title)"/>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-xl-3">
         <label for="director">Director</label>
-        <input type="text" class="form-control" id="director" @bind="movieDTO.Director"/>
+        <input type="text" class="form-control mt-1" id="director" @bind="movieDTO.Director"/>
         <ValidationMessage For="@(() => movieDTO.Director)"/>
     </div>
-    <div class="form-group">
-        <label for="releaseDate">Release Date</label>
-        <input type="date" id="releaseDate" name="movie-releaseDate" @bind="movieDTO.ReleaseDate"/>
+    <div class="form-group mb-xl-3">
+        <label for="releaseDate" class="form-label">Release Date</label>
+        <input type="date" id="releaseDate" name="movie-releaseDate" class="form-control" @bind="movieDTO.ReleaseDate"/>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
@@ -35,7 +35,14 @@
 
     protected override void OnInitialized()
     {
-        movieDTO = MovieService.GetMovie(movieTitle);
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            movieDTO = MovieService.GetMovie(movieTitle);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnUpdate(MovieDTO movie)

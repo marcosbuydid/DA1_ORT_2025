@@ -25,7 +25,8 @@ namespace DataAccess
 
         private void LoadDefaultAdministratorUser()
         {
-            Users.Add(new User(null, "Marcos", "Buydid", "marcosb@email.com", "123456", "Administrator"));
+            Users.Add(new User(null, "Marcos", "Buydid", "marcosb@email.com",
+                "fTjXowEsKZzCX8K9YYq3FXG9eztFfl2fuOa6buT59tUHUutO8C7z49UnTUIaA0Zr", "Administrator"));
         }
 
         public List<Movie> GetMovies()

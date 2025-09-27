@@ -9,4 +9,5 @@ public interface IUserService
     void AddUser(UserDTO user);
     void DeleteUser(string email);
     void UpdateUser(UserDTO user);
+    void ChangePassword(ChangePasswordDTO changePasswordDTO);
 }

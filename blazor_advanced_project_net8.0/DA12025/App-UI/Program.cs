@@ -4,6 +4,7 @@ using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
+using Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,19 +12,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-//builder.Services.AddSingleton<IMovieRepository, InMemoryDatabase>();
-//builder.Services.AddSingleton<IUserRepository, InMemoryDatabase>();
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IMovieRepository, InMemoryDatabase>();
+builder.Services.AddSingleton<IUserRepository, InMemoryDatabase>();
+//builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
-builder.Services.AddDbContextFactory<AppDbContext>(
-    options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        providerOptions => providerOptions.EnableRetryOnFailure())
+builder.Services.Configure<SystemSettings>(builder.Configuration.GetSection("SystemSettings"));
+builder.Services.AddScoped<ISecureDataService, SecureDataService>();
+
+builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    providerOptions => providerOptions.EnableRetryOnFailure())
 );
 
 var app = builder.Build();

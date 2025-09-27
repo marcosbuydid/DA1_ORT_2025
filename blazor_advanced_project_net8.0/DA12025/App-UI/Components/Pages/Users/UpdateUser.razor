@@ -4,6 +4,7 @@
 @using Services.Models
 
 @inject IUserService UserService
+@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
 
 <h1>Update User</h1>
@@ -40,11 +41,18 @@
 
     protected override void OnInitialized()
     {
-        userDTO = UserService.GetUser(userEmail);
-        //used to fill temporary password input only
-        //user service on update leaves the same
-        //password the user has
-        userDTO.Password = "87654321";
+        if (SessionService.GetLoggedUser() != null!)
+        {
+            userDTO = UserService.GetUser(userEmail);
+            //used to fill temporary password input only
+            //user service on update leaves the same
+            //password the user has
+            userDTO.Password = "87654321";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnUpdate(UserDTO user)

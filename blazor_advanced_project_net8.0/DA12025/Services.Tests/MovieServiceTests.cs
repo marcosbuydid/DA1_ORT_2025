@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using Domain;
+using Services.Interfaces;
 using Services.Models;
 
 namespace Services.Tests;
@@ -11,7 +12,7 @@ public class MovieServiceTests
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private IMovieRepository _movieRepository;
-    private MovieService _movieService;
+    private IMovieService _movieService;
     private Movie _movie;
     private MovieDTO _movieDto;
 

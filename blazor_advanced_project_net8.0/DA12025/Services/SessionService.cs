@@ -8,10 +8,12 @@ namespace Services;
 public class SessionService : ISessionService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ISecureDataService _secureDataService;
 
-    public SessionService(IUserRepository userRepository)
+    public SessionService(IUserRepository userRepository, ISecureDataService secureDataService)
     {
         _userRepository = userRepository;
+        _secureDataService = secureDataService;
     }
 
     public UserDTO GetLoggedUser()
@@ -23,12 +25,15 @@ public class SessionService : ISessionService
     {
         if (LoggedUser.Current != null) return;
 
-        User? user =
-            _userRepository.GetUsers().FirstOrDefault(user => user.Email == email && user.Password == password);
+        User? user = _userRepository.GetUsers()
+            .FirstOrDefault(u => u.Email == email);
 
-        LoggedUser.Current = user != null
-            ? FromEntity(user)
-            : throw new ArgumentException("User or password is incorrect, try again");
+        if (user is null || !_secureDataService.CompareHashes(user.Password, password))
+        {
+            throw new ArgumentException("User or password is incorrect, try again");
+        }
+
+        LoggedUser.Current = FromEntity(user);
     }
 
     public void Logout()

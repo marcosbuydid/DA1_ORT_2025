@@ -1,7 +1,10 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using Domain;
+using Microsoft.Extensions.Options;
+using Services.Interfaces;
 using Services.Models;
+using Services.Settings;
 
 namespace Services.Tests;
 
@@ -11,9 +14,13 @@ public class UserServiceTests
     private AppDbContext _context;
     private InMemoryAppContextFactory _contextFactory;
     private IUserRepository _userRepository;
-    private UserService _userService;
+    private IUserService _userService;
+    private ISecureDataService _secureDataService;
+    private SystemSettings systemSettings;
+    private IOptions<SystemSettings> options;
     private User _user;
     private UserDTO _userDto;
+    private ChangePasswordDTO _changePasswordDTO;
 
     [TestInitialize]
     public void SetUp()
@@ -21,9 +28,15 @@ public class UserServiceTests
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
         _userRepository = new UserRepository(_context);
-        _userService = new UserService(_userRepository);
+        systemSettings = new SystemSettings();
+        systemSettings.Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
+        options = Options.Create(systemSettings);
+        _secureDataService = new SecureDataService(options);
+        _userService = new UserService(_userRepository, _secureDataService);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
         _userDto = new UserDTO(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
+        _changePasswordDTO = new ChangePasswordDTO("timrobbins@email.com", "123456",
+            "12345678", "12345678");
     }
 
     [TestCleanup]
@@ -36,6 +49,7 @@ public class UserServiceTests
     public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         List<UserDTO> users = _userService.GetUsers();
@@ -85,6 +99,7 @@ public class UserServiceTests
     public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         UserDTO result = _userService.GetUser(_user.Email);
@@ -110,6 +125,7 @@ public class UserServiceTests
     public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
+        _user.Password = _secureDataService.Hash(_user.Password);
         _userRepository.AddUser(_user);
         //act
         _userService.DeleteUser(_user.Email);
@@ -142,5 +158,31 @@ public class UserServiceTests
         Assert.AreEqual("New Name", updatedUser.Name);
         Assert.AreEqual("New LastName", updatedUser.LastName);
         Assert.AreEqual("New Role", updatedUser.Role);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentException))]
+    public void ChangePassword_WhenCalledWithWrongOldPassword_ThenThrowsException()
+    {
+        //arrange
+        _userService.AddUser(_userDto);
+        //act
+        _changePasswordDTO.OldPassword = "1234";
+        _userService.ChangePassword(_changePasswordDTO);
+        //assert
+    }
+
+    [TestMethod]
+    public void ChangePassword_WhenCalled_ThenPasswordIsUpdated()
+    {
+        //arrange
+        _userService.AddUser(_userDto);
+        //act
+        _userService.ChangePassword(_changePasswordDTO);
+        //assert
+        User? user = _userRepository.GetUser(user => user.Email == _changePasswordDTO.UserEmail);
+        string oldPasswordHash = _secureDataService.Hash(_changePasswordDTO.OldPassword);
+        Assert.IsFalse(_secureDataService.CompareHashes(oldPasswordHash, _changePasswordDTO.NewPassword));
+        Assert.IsTrue(_secureDataService.CompareHashes(user.Password, _changePasswordDTO.NewPassword));
     }
 }
