@@ -71,6 +71,21 @@ public class UserService : IUserService
 
         return FromEntity(user);
     }
+    
+    public void ChangePassword(ChangePasswordDTO changePasswordDTO)
+    {
+        User? user = ValidateOldPassword(changePasswordDTO.UserEmail, changePasswordDTO.OldPassword);
+        if (user != null)
+        {
+            string newPasswordHash = _secureDataService.Hash(changePasswordDTO.NewPassword);
+            user.Password = newPasswordHash;
+            _userRepository.UpdateUser(user);
+        }
+        else
+        {
+            throw new ArgumentException("Old password entered is incorrect");
+        }
+    }
 
     private void ValidateUserEmail(string email)
     {
@@ -83,6 +98,20 @@ public class UserService : IUserService
                 throw new ArgumentException("There`s a user already defined with that email");
             }
         }
+    }
+    
+    private User? ValidateOldPassword(string email, string inputPassword)
+    {
+        User? user = _userRepository.GetUser(user => user.Email == email);
+        if (user == null)
+        {
+            throw new ArgumentException("Cannot find user with this email");
+        }
+
+        string storedHashedPassword = user.Password;
+        bool hashesMatch = _secureDataService.CompareHashes(storedHashedPassword,inputPassword);
+
+        return hashesMatch ? user : null;
     }
 
     private static User ToEntity(UserDTO userDTO)
