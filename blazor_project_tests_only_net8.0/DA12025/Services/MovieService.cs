@@ -6,33 +6,33 @@ namespace Services;
 
 public class MovieService : IMovieService
 {
-    private readonly InMemoryDatabase _inMemoryDatabase;
+    private readonly InMemoryMovieRepository _movieRepository;
 
-    public MovieService(InMemoryDatabase inMemoryDatabase)
+    public MovieService(InMemoryMovieRepository movieRepository)
     {
-        _inMemoryDatabase = inMemoryDatabase;
+        _movieRepository = movieRepository;
     }
 
     public void AddMovie(Movie movie)
     {
         ValidateUniqueTitle(movie.Title);
-        _inMemoryDatabase.AddMovie(movie);
+        _movieRepository.AddMovie(movie);
     }
 
     public void DeleteMovie(string title)
     {
         Movie movieToDelete = GetMovie(title);
-        _inMemoryDatabase.DeleteMovie(movieToDelete);
+        _movieRepository.DeleteMovie(movieToDelete);
     }
 
     public List<Movie> GetMovies()
     {
-        return _inMemoryDatabase.GetMovies();
+        return _movieRepository.GetMovies();
     }
 
     public void UpdateMovie(Movie movieToUpdate)
     {
-        Movie? movie = _inMemoryDatabase.GetMovie(movieToUpdate.Title);
+        Movie? movie = _movieRepository.GetMovie(movieToUpdate.Title);
         if (movie == null)
         {
             throw new ArgumentException("Cannot find the specified movie");
@@ -41,12 +41,12 @@ public class MovieService : IMovieService
         movie.Title = movieToUpdate.Title;
         movie.Director = movieToUpdate.Director;
         movie.ReleaseDate = movieToUpdate.ReleaseDate;
-        _inMemoryDatabase.UpdateMovie(movie);
+        _movieRepository.UpdateMovie(movie);
     }
 
     public Movie GetMovie(string title)
     {
-        Movie? movie = _inMemoryDatabase.GetMovie(title);
+        Movie? movie = _movieRepository.GetMovie(title);
         if (movie == null)
         {
             throw new ArgumentException("Cannot find movie with this title");
@@ -57,9 +57,11 @@ public class MovieService : IMovieService
 
     private void ValidateUniqueTitle(string title)
     {
-        foreach (var movie in _inMemoryDatabase.GetMovies())
+        string inputTitle = title.Trim().ToLowerInvariant();
+        foreach (var movie in _movieRepository.GetMovies())
         {
-            if (movie.Title == title)
+            string retrievedTitle = movie.Title.Trim().ToLowerInvariant();
+            if (retrievedTitle == inputTitle)
             {
                 throw new ArgumentException("There`s a movie already defined with that title");
             }

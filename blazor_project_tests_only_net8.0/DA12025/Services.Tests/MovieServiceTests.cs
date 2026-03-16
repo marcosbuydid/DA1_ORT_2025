@@ -6,15 +6,15 @@ namespace Services.Tests;
 [TestClass]
 public class MovieServiceTests
 {
-    private InMemoryDatabase _inMemoryDatabase;
+    private InMemoryMovieRepository _movieRepository;
     private MovieService _movieService;
     private Movie _movie;
 
     [TestInitialize]
     public void Setup()
     {
-        _inMemoryDatabase = new InMemoryDatabase();
-        _movieService = new MovieService(_inMemoryDatabase);
+        _movieRepository = new InMemoryMovieRepository();
+        _movieService = new MovieService(_movieRepository);
         _movie = new Movie("Sing Sing", "Greg Kwedar", new DateTime(2024, 07, 12), 2000000);
     }
 
@@ -36,9 +36,9 @@ public class MovieServiceTests
         //act
         _movieService.AddMovie(_movie);
         //assert
-        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
+        Movie? retrievedMovie = _movieRepository.GetMovie(_movie.Title);
         Assert.IsNotNull(retrievedMovie);
-        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 1);
+        Assert.IsTrue(_movieRepository.GetMovies().Count == 1);
     }
 
     [TestMethod]
@@ -55,7 +55,7 @@ public class MovieServiceTests
     public void GetMovie_WhenCalled_ThenMovieIsReturned()
     {
         //arrange
-        _inMemoryDatabase.AddMovie(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         Movie retrievedMovie = _movieService.GetMovie(_movie.Title);
         //assert
@@ -69,19 +69,19 @@ public class MovieServiceTests
         //act
         _movieService.GetMovies();
         //assert
-        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 0);
+        Assert.IsTrue(_movieRepository.GetMovies().Count == 0);
     }
 
     [TestMethod]
     public void GetMovies_WhenCalled_ThenMoviesAreReturned()
     {
         //arrange
-        _inMemoryDatabase.AddMovie(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         _movieService.GetMovies();
         //assert
-        Assert.IsTrue(_inMemoryDatabase.GetMovies().Contains(_movie));
-        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 1);
+        Assert.IsTrue(_movieRepository.GetMovies().Contains(_movie));
+        Assert.IsTrue(_movieRepository.GetMovies().Count == 1);
     }
 
     [TestMethod]
@@ -98,11 +98,11 @@ public class MovieServiceTests
     public void DeleteMovie_WhenCalled_ThenMovieIsDeleted()
     {
         //arrange
-        _inMemoryDatabase.AddMovie(_movie);
+        _movieRepository.AddMovie(_movie);
         //act
         _movieService.DeleteMovie(_movie.Title);
         //assert
-        Assert.IsTrue(_inMemoryDatabase.GetMovies().Count == 0);
+        Assert.IsTrue(_movieRepository.GetMovies().Count == 0);
     }
 
     [TestMethod]
@@ -119,12 +119,12 @@ public class MovieServiceTests
     public void UpdateMovie_WhenCalled_ThenMovieIsUpdated()
     {
         //arrange
-        _inMemoryDatabase.AddMovie(_movie);
+        _movieRepository.AddMovie(_movie);
         _movie.Budget = 1000000;
         //act
         _movieService.UpdateMovie(_movie);
         //assert
-        Movie? retrievedMovie = _inMemoryDatabase.GetMovie(_movie.Title);
+        Movie? retrievedMovie = _movieRepository.GetMovie(_movie.Title);
         Assert.AreSame(retrievedMovie, _movie);
         Assert.AreEqual(1000000, _movie.Budget);
     }
