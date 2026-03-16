@@ -7,7 +7,7 @@ namespace Services.Tests;
 [TestClass]
 public class UserServiceTests
 {
-    private InMemoryDatabase _inMemoryDatabase;
+    private InMemoryUserRepository _inMemoryUserRepository;
     private UserService _userService;
     private User _user;
     private UserDTO _userDTO;
@@ -15,8 +15,8 @@ public class UserServiceTests
     [TestInitialize]
     public void Setup()
     {
-        _inMemoryDatabase = new InMemoryDatabase();
-        _userService = new UserService(_inMemoryDatabase);
+        _inMemoryUserRepository = new InMemoryUserRepository();
+        _userService = new UserService(_inMemoryUserRepository);
         _user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
         _userDTO = new UserDTO("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
     }
@@ -26,7 +26,7 @@ public class UserServiceTests
     public void AddUser_WhenCalledTwiceWithTheSameUser_ThenThrowsException()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
+        _inMemoryUserRepository.GetUsers().Clear();
         //act
         _userService.AddUser(_userDTO);
         _userService.AddUser(_userDTO);
@@ -40,9 +40,9 @@ public class UserServiceTests
         //act
         _userService.AddUser(_userDTO);
         //assert
-        User? retrievedUser = _inMemoryDatabase.GetUser(_userDTO.Email);
+        User? retrievedUser = _inMemoryUserRepository.GetUser(_userDTO.Email);
         Assert.IsNotNull(retrievedUser);
-        Assert.IsTrue(_inMemoryDatabase.GetUsers().Contains(retrievedUser));
+        Assert.IsTrue(_inMemoryUserRepository.GetUsers().Contains(retrievedUser));
     }
 
     [TestMethod]
@@ -59,7 +59,7 @@ public class UserServiceTests
     public void GetUser_WhenCalled_ThenUserIsReturned()
     {
         //arrange
-        _inMemoryDatabase.AddUser(_user);
+        _inMemoryUserRepository.AddUser(_user);
         //act
         UserDTO retrievedUser = _userService.GetUser(_userDTO.Email);
         //assert
@@ -73,7 +73,7 @@ public class UserServiceTests
     public void GetUsers_WhenCalledWithNoUsersCreated_ThenNoUsersAreReturned()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
+        _inMemoryUserRepository.GetUsers().Clear();
         //act
         List<UserDTO> users = _userService.GetUsers();
         //assert
@@ -84,8 +84,8 @@ public class UserServiceTests
     public void GetUsers_WhenCalled_ThenUsersAreReturned()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
-        _inMemoryDatabase.AddUser(_user);
+        _inMemoryUserRepository.GetUsers().Clear();
+        _inMemoryUserRepository.AddUser(_user);
         //act
         List<UserDTO> users = _userService.GetUsers();
         //assert
@@ -106,12 +106,12 @@ public class UserServiceTests
     public void DeleteUser_WhenCalled_ThenUserIsDeleted()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
-        _inMemoryDatabase.AddUser(_user);
+        _inMemoryUserRepository.GetUsers().Clear();
+        _inMemoryUserRepository.AddUser(_user);
         //act
         _userService.DeleteUser(_userDTO.Email);
         //assert
-        Assert.IsTrue(_inMemoryDatabase.GetUsers().Count == 0);
+        Assert.IsTrue(_inMemoryUserRepository.GetUsers().Count == 0);
     }
 
     [TestMethod]
@@ -128,14 +128,14 @@ public class UserServiceTests
     public void UpdateUser_WhenCalled_ThenUserIsUpdated()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
-        _inMemoryDatabase.AddUser(_user);
+        _inMemoryUserRepository.GetUsers().Clear();
+        _inMemoryUserRepository.AddUser(_user);
         _userDTO.Name = "Tom";
         _userDTO.LastName = "Clarks";
         //act
         _userService.UpdateUser(_userDTO);
         //assert
-        User? updatedUser = _inMemoryDatabase.GetUser(_userDTO.Email);
+        User? updatedUser = _inMemoryUserRepository.GetUser(_userDTO.Email);
         Assert.AreEqual(_userDTO.Name, updatedUser.Name);
         Assert.AreEqual(_userDTO.LastName, updatedUser.LastName);
         Assert.AreEqual(_userDTO.Email, updatedUser.Email);
