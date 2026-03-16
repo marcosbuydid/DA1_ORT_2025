@@ -70,9 +70,11 @@ namespace Services
 
         private void ValidateUniqueTitle(string title)
         {
+            string inputTitle = title.Trim().ToLowerInvariant();
             foreach (var movie in _movieRepository.GetMovies())
             {
-                if (movie.Title == title)
+                string retrievedTitle = movie.Title.Trim().ToLowerInvariant();
+                if (retrievedTitle == inputTitle)
                 {
                     throw new ArgumentException("There`s a movie already defined with that title");
                 }

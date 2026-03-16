@@ -71,9 +71,11 @@ public class UserService : IUserService
 
     private void ValidateUserEmail(string email)
     {
+        string inputEmail = email.Trim().ToLowerInvariant();
         foreach (var user in _userRepository.GetUsers())
         {
-            if (user.Email == email)
+            string retrievedEmail = user.Email.Trim().ToLowerInvariant();
+            if (retrievedEmail == inputEmail)
             {
                 throw new ArgumentException("There`s a user already defined with that email");
             }
