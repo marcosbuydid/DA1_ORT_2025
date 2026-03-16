@@ -2,11 +2,11 @@
 
 namespace DataAccess
 {
-    public class InMemoryDatabase
+    public class InMemoryMovieRepository
     {
         private List<Movie> Movies { get; }
 
-        public InMemoryDatabase()
+        public InMemoryMovieRepository()
         {
             Movies = new List<Movie>();
             LoadDefaultMovies();
