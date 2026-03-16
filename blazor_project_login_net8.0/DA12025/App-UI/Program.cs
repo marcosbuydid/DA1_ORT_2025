@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<InMemoryDatabase>();
+builder.Services.AddSingleton<InMemoryMovieRepository>();
+builder.Services.AddSingleton<InMemoryUserRepository>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<SessionService>();

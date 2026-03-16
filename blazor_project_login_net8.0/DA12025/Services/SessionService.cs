@@ -7,11 +7,11 @@ namespace Services;
 
 public class SessionService : ISessionService
 {
-    private readonly InMemoryDatabase _inMemoryDatabase;
+    private readonly InMemoryUserRepository _userRepository;
 
-    public SessionService(InMemoryDatabase inMemoryDatabase)
+    public SessionService(InMemoryUserRepository userRepository)
     {
-        _inMemoryDatabase = inMemoryDatabase;
+        _userRepository = userRepository;
     }
 
     public UserDTO GetLoggedUser()
@@ -24,7 +24,7 @@ public class SessionService : ISessionService
         if (LoggedUser.Current != null) return;
 
         User? user =
-            _inMemoryDatabase.GetUsers().FirstOrDefault(user => user.Email == email && user.Password == password);
+            _userRepository.GetUsers().FirstOrDefault(user => user.Email == email && user.Password == password);
 
         LoggedUser.Current = user != null
             ? FromEntity(user)
