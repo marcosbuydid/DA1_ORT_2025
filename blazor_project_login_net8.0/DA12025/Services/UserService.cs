@@ -7,24 +7,24 @@ namespace Services;
 
 public class UserService : IUserService
 {
-    private readonly InMemoryDatabase _inMemoryDatabase;
+    private readonly InMemoryUserRepository _userRepository;
 
-    public UserService(InMemoryDatabase inMemoryDatabase)
+    public UserService(InMemoryUserRepository userRepository)
     {
-        _inMemoryDatabase = inMemoryDatabase;
+        _userRepository = userRepository;
     }
 
     public void AddUser(UserDTO user)
     {
         ValidateUserEmail(user.Email);
-        _inMemoryDatabase.AddUser(ToEntity(user));
+        _userRepository.AddUser(ToEntity(user));
     }
 
     public List<UserDTO> GetUsers()
     {
         List<UserDTO> usersDTO = new List<UserDTO>();
 
-        foreach (var user in _inMemoryDatabase.GetUsers())
+        foreach (var user in _userRepository.GetUsers())
         {
             usersDTO.Add(FromEntity(user));
         }
@@ -34,18 +34,18 @@ public class UserService : IUserService
 
     public void DeleteUser(string email)
     {
-        User? userToDelete = _inMemoryDatabase.GetUser(email);
+        User? userToDelete = _userRepository.GetUser(email);
         if (userToDelete == null)
         {
             throw new ArgumentException("Cannot find the specified user");
         }
 
-        _inMemoryDatabase.DeleteUser(userToDelete);
+        _userRepository.DeleteUser(userToDelete);
     }
 
     public void UpdateUser(UserDTO userToUpdate)
     {
-        User? user = _inMemoryDatabase.GetUser(userToUpdate.Email);
+        User? user = _userRepository.GetUser(userToUpdate.Email);
         if (user == null)
         {
             throw new ArgumentException("Cannot find the specified user");
@@ -57,12 +57,12 @@ public class UserService : IUserService
         //in this example password is non-updatable
         userToUpdate.Password = user.Password;
         user.Role = userToUpdate.Role;
-        _inMemoryDatabase.UpdateUser(user);
+        _userRepository.UpdateUser(user);
     }
 
     public UserDTO GetUser(string email)
     {
-        User? user = _inMemoryDatabase.GetUser(email);
+        User? user = _userRepository.GetUser(email);
         if (user == null)
         {
             throw new ArgumentException("Cannot find user with this email");
@@ -73,9 +73,11 @@ public class UserService : IUserService
 
     private void ValidateUserEmail(string email)
     {
-        foreach (var user in _inMemoryDatabase.GetUsers())
+        string inputEmail = email.Trim().ToLowerInvariant();
+        foreach (var user in _userRepository.GetUsers())
         {
-            if (user.Email == email)
+            string retrievedEmail = user.Email.Trim().ToLowerInvariant();
+            if (retrievedEmail == inputEmail)
             {
                 throw new ArgumentException("There`s a user already defined with that email");
             }

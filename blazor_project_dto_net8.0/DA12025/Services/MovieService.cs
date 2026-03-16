@@ -7,35 +7,35 @@ namespace Services
 {
     public class MovieService : IMovieService
     {
-        private readonly InMemoryDatabase _inMemoryDatabase;
+        private readonly InMemoryMovieRepository _movieRepository;
 
-        public MovieService(InMemoryDatabase inMemoryDatabase)
+        public MovieService(InMemoryMovieRepository movieRepository)
         {
-            _inMemoryDatabase = inMemoryDatabase;
+            _movieRepository = movieRepository;
         }
 
         public void AddMovie(MovieDTO movie)
         {
             ValidateUniqueTitle(movie.Title);
-            _inMemoryDatabase.AddMovie(ToEntity(movie));
+            _movieRepository.AddMovie(ToEntity(movie));
         }
 
         public void DeleteMovie(string title)
         {
-            Movie? movieToDelete = _inMemoryDatabase.GetMovie(title);
+            Movie? movieToDelete = _movieRepository.GetMovie(title);
             if (movieToDelete == null)
             {
                 throw new ArgumentException("Cannot find the specified movie");
             }
 
-            _inMemoryDatabase.DeleteMovie(movieToDelete);
+            _movieRepository.DeleteMovie(movieToDelete);
         }
 
         public List<MovieDTO> GetMovies()
         {
             List<MovieDTO> moviesDTO = new List<MovieDTO>();
 
-            foreach (var movie in _inMemoryDatabase.GetMovies())
+            foreach (var movie in _movieRepository.GetMovies())
             {
                 moviesDTO.Add(FromEntity(movie));
             }
@@ -45,7 +45,7 @@ namespace Services
 
         public void UpdateMovie(MovieDTO movieToUpdate)
         {
-            Movie? movie = _inMemoryDatabase.GetMovie(movieToUpdate.Title);
+            Movie? movie = _movieRepository.GetMovie(movieToUpdate.Title);
             if (movie == null)
             {
                 throw new ArgumentException("Cannot find the specified movie");
@@ -56,12 +56,12 @@ namespace Services
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
             //in this example budget is non-updatable
             movieToUpdate.Budget = movie.Budget;
-            _inMemoryDatabase.UpdateMovie(movie);
+            _movieRepository.UpdateMovie(movie);
         }
 
         public MovieDTO GetMovie(string title)
         {
-            Movie? movie = _inMemoryDatabase.GetMovie(title);
+            Movie? movie = _movieRepository.GetMovie(title);
             if (movie == null)
             {
                 throw new ArgumentException("Cannot find movie with this title");
@@ -72,9 +72,11 @@ namespace Services
 
         private void ValidateUniqueTitle(string title)
         {
-            foreach (var movie in _inMemoryDatabase.GetMovies())
+            string inputTitle = title.Trim().ToLowerInvariant();
+            foreach (var movie in _movieRepository.GetMovies())
             {
-                if (movie.Title == title)
+                string retrievedTitle = movie.Title.Trim().ToLowerInvariant();
+                if (retrievedTitle == inputTitle)
                 {
                     throw new ArgumentException("There`s a movie already defined with that title");
                 }

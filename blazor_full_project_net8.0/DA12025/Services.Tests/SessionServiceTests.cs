@@ -7,7 +7,7 @@ namespace Services.Tests;
 [TestClass]
 public class SessionServiceTests
 {
-    private InMemoryDatabase _inMemoryDatabase;
+    private InMemoryUserRepository _userRepository;
     private SessionService _sessionService;
     private User _user;
     private UserLoginDTO _userLoginDTO;
@@ -15,8 +15,8 @@ public class SessionServiceTests
     [TestInitialize]
     public void Setup()
     {
-        _inMemoryDatabase = new InMemoryDatabase();
-        _sessionService = new SessionService(_inMemoryDatabase);
+        _userRepository = new InMemoryUserRepository();
+        _sessionService = new SessionService(_userRepository);
         _user = new User("Nick", "Williams", "nickwilliams@email.com", "p@assword", "User");
         _userLoginDTO = new UserLoginDTO("nick@email.com", "password");
     }
@@ -45,8 +45,8 @@ public class SessionServiceTests
     public void GetLoggedUser_WhenCalledWithUserLoggedIn_ThenLoggedUserIsNotNull()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
-        _inMemoryDatabase.AddUser(_user);
+        _userRepository.GetUsers().Clear();
+        _userRepository.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         UserDTO loggedUser = _sessionService.GetLoggedUser();
@@ -62,8 +62,8 @@ public class SessionServiceTests
     public void Logout_WhenCalledAfterSessionLogout_ThenLoggedUserIsNull()
     {
         //arrange
-        _inMemoryDatabase.GetUsers().Clear();
-        _inMemoryDatabase.AddUser(_user);
+        _userRepository.GetUsers().Clear();
+        _userRepository.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
         _sessionService.Logout();

@@ -12,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<IMovieRepository, InMemoryDatabase>();
-builder.Services.AddSingleton<IUserRepository, InMemoryDatabase>();
+builder.Services.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
+builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 //builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
 
