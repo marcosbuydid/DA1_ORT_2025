@@ -8,15 +8,13 @@ public class Person
     public string Name
     {
         get => _name;
-
-        set { _name = value; }
+        set => _name = value; 
     }
 
     public DateTime Birthday
     {
         get => _birthday;
-
-        set { _birthday = value; }
+        set => _birthday = value;
     }
 
     public Person(string name, DateTime birthday)
@@ -28,8 +26,8 @@ public class Person
     public int CalculateAge()
     {
         DateTime today = DateTime.Today;
-        int age = today.Year - _birthday.Year;
-        if (_birthday > today.AddYears(-age))
+        int age = today.Year - Birthday.Year;
+        if (Birthday > today.AddYears(-age))
         {
             age--;
         }
@@ -39,6 +37,6 @@ public class Person
 
     public string GetWeekDayOfBorn()
     {
-        return _birthday.DayOfWeek.ToString();
+        return Birthday.DayOfWeek.ToString();
     }
 }
