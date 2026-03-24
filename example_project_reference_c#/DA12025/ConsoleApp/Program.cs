@@ -7,20 +7,22 @@ class Program
     static void Main(string[] args)
     {
         Console.Write("Type your name: ");
-        string name = Console.ReadLine();
+        string? inputName = Console.ReadLine();
 
         Console.Write("Type your birthday (yyyy-MM-dd): ");
-        if (DateTime.TryParse(Console.ReadLine(), out DateTime birthday))
+        string? inputBirthday = Console.ReadLine();
+
+        if (!DateTime.TryParse(inputBirthday, out DateTime birthday) || String.IsNullOrEmpty(inputName))
         {
-            Person person = new Person(name, birthday);
-            
-            Console.WriteLine($"\nHello, {person.Name}!");
-            Console.WriteLine($"You born on {person.GetWeekDayOfBorn()}.");
-            Console.WriteLine($"Your are {person.CalculateAge()} years old.");
+            Console.WriteLine("Input name, birthday or both are invalid. Run the program again.");
         }
         else
         {
-            Console.WriteLine("Invalid date format. Run the program again.");
+            Person person = new Person(inputName, birthday);
+
+            Console.WriteLine($"\nHello, {person.Name}!");
+            Console.WriteLine($"You born on {person.GetWeekDayOfBorn()}.");
+            Console.WriteLine($"Your are {person.CalculateAge()} years old.");
         }
     }
 }
