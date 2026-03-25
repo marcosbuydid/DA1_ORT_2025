@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.Globalization;
+using Domain;
 
 namespace ConsoleApp;
 
@@ -12,7 +13,8 @@ class Program
         Console.Write("Type your birthday (yyyy-MM-dd): ");
         string? inputBirthday = Console.ReadLine();
 
-        if (!DateTime.TryParse(inputBirthday, out DateTime birthday) || String.IsNullOrEmpty(inputName))
+        if (!DateTime.TryParseExact(inputBirthday, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out DateTime birthday) || String.IsNullOrEmpty(inputName))
         {
             Console.WriteLine("Input name, birthday or both are invalid. Run the program again.");
         }
