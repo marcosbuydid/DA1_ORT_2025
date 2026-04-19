@@ -53,7 +53,8 @@ public class UserService : IUserService
 
         user.Name = userToUpdate.Name;
         user.LastName = userToUpdate.LastName;
-        //in the example password is non-updatable
+        user.Email = userToUpdate.Email;
+        //in this example password is non-updatable
         //this line is added to maintain password value 
         //after update
         userToUpdate.Password = user.Password;
