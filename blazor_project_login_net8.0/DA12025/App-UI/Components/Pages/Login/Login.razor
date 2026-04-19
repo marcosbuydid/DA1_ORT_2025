@@ -1,9 +1,11 @@
 ﻿@page "/login"
+@using System.Text.Json
 @using Services
 @using Services.Models
 
 @inject SessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <div class="d-flex justify-content-center align-items-center">
     <h1>Login</h1>
@@ -42,6 +44,7 @@
 
 @code {
     private UserLoginDTO userLoginDTO;
+    private LoggedUserDTO? _user;
     private bool alertVisible = false;
     private string alertMessage = "";
 
@@ -55,7 +58,15 @@
         try
         {
             SessionService.Login(userLoginDTO.Email, userLoginDTO.Password);
-            NavigationManager.NavigateTo("/");
+            _user = SessionService.GetLoggedUser();
+            if (_user != null)
+            {
+                JS.InvokeVoidAsync("localStorage.setItem", "user",
+                    JsonSerializer.Serialize(_user)
+                );
+            }
+
+            NavigationManager.NavigateTo("/", true);
         }
         catch (ArgumentException e)
         {
