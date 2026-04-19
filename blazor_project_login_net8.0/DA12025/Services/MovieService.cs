@@ -51,10 +51,11 @@ namespace Services
                 throw new ArgumentException("Cannot find the specified movie");
             }
 
-            movie.Title = movieToUpdate.Title;
             movie.Director = movieToUpdate.Director;
             movie.ReleaseDate = movieToUpdate.ReleaseDate;
-            //in this example budget is non-updatable
+            //in the example budget is non-updatable
+            //this line is added to avoid budget value 
+            //be on cero after update
             movieToUpdate.Budget = movie.Budget;
             _movieRepository.UpdateMovie(movie);
         }
