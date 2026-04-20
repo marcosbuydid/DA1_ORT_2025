@@ -29,7 +29,7 @@ public class UserServiceTests
         _context = _contextFactory.CreateDbContext();
         _userRepository = new EFUserRepository(_context);
         systemSettings = new SystemSettings();
-        systemSettings.Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
+        systemSettings.EncryptionKey = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
         options = Options.Create(systemSettings);
         _secureDataService = new SecureDataService(options);
         _userService = new UserService(_userRepository, _secureDataService);

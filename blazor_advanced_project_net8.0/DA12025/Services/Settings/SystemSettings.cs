@@ -2,5 +2,5 @@
 
 public class SystemSettings
 {
-    public string? Token { get; set; }
+    public string? EncryptionKey { get; set; }
 }

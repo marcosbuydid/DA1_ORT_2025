@@ -19,13 +19,12 @@ namespace Factory
         public static void AddDataAccess(IServiceCollection serviceCollection)
         {
             /* InMemory Repositories */
-            serviceCollection.AddSingleton<IUserRepository, InMemoryUserRepository>();
-            serviceCollection.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
+            //serviceCollection.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            //serviceCollection.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
 
             /* Entity Framework Repositories */
-            //serviceCollection.AddScoped<IMovieRepository, EFMovieRepository>();
-            //serviceCollection.AddScoped<IUserRepository, EFUserRepository>();
+            serviceCollection.AddScoped<IMovieRepository, EFMovieRepository>();
+            serviceCollection.AddScoped<IUserRepository, EFUserRepository>();
         }
     }
-
 }
