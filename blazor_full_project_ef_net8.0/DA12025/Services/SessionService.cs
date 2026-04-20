@@ -8,37 +8,38 @@ namespace Services;
 public class SessionService : ISessionService
 {
     private readonly UserRepository _userRepository;
+    private LoggedUserDTO _loggedUserDTO;
 
     public SessionService(UserRepository userRepository)
     {
         _userRepository = userRepository;
     }
 
-    public UserDTO GetLoggedUser()
+    public LoggedUserDTO GetLoggedUser()
     {
-        return LoggedUser.Current;
+        return _loggedUserDTO;
     }
 
     public void Login(string email, string password)
     {
-        if (LoggedUser.Current != null) return;
+        if (_loggedUserDTO != null) return;
 
         User? user =
             _userRepository.GetUsers().FirstOrDefault(user => user.Email == email && user.Password == password);
 
-        LoggedUser.Current = user != null
+        _loggedUserDTO = user != null
             ? FromEntity(user)
             : throw new ArgumentException("User or password is incorrect, try again");
     }
 
     public void Logout()
     {
-        LoggedUser.Current = null;
+        _loggedUserDTO = null;
     }
 
-    private static UserDTO FromEntity(User user)
+    private static LoggedUserDTO FromEntity(User user)
     {
-        return new UserDTO()
+        return new LoggedUserDTO()
         {
             Name = user.Name,
             LastName = user.LastName,
