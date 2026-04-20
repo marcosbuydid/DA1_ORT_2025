@@ -4,6 +4,7 @@
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>User List</h1>
 
@@ -43,6 +44,18 @@
     {
         users = UserService.GetUsers();
         selectedUserEmail = "";
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnDelete(string selectedUserEmail)
