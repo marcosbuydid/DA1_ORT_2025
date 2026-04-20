@@ -1,8 +1,8 @@
 ﻿using DataAccess;
-using DataAccess.Interfaces;
 using Domain;
 using Microsoft.Extensions.Options;
 using Services.Interfaces;
+using Services.Interfaces.Repositories;
 using Services.Models;
 using Services.Settings;
 
@@ -26,9 +26,9 @@ public class SessionServiceTests
     {
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
-        _userRepository = new UserRepository(_context);
+        _userRepository = new EFUserRepository(_context);
         systemSettings = new SystemSettings();
-        systemSettings.Token = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
+        systemSettings.EncryptionKey = "abcdefghijklmnopioBpLgpjWR2aHeotXSnsK1234567";
         options = Options.Create(systemSettings);
         _secureDataService = new SecureDataService(options);
         _sessionService = new SessionService(_userRepository, _secureDataService);
@@ -57,7 +57,7 @@ public class SessionServiceTests
     {
         //arrange
         //act
-        UserDTO loggedUser = _sessionService.GetLoggedUser();
+        LoggedUserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
         Assert.IsNull(loggedUser);
     }
@@ -70,7 +70,7 @@ public class SessionServiceTests
         _userRepository.AddUser(_user);
         _sessionService.Login(_userDto.Email, _userDto.Password);
         //act
-        UserDTO loggedUser = _sessionService.GetLoggedUser();
+        LoggedUserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
         Assert.IsNotNull(loggedUser);
         Assert.AreEqual(_user.Name, loggedUser.Name);

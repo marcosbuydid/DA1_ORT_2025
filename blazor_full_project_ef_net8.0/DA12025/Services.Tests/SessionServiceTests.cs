@@ -48,7 +48,7 @@ public class SessionServiceTests
     {
         //arrange
         //act
-        UserDTO loggedUser = _sessionService.GetLoggedUser();
+        LoggedUserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
         Assert.IsNull(loggedUser);
     }
@@ -60,7 +60,7 @@ public class SessionServiceTests
         _userRepository.AddUser(_user);
         _sessionService.Login(_user.Email, _user.Password);
         //act
-        UserDTO loggedUser = _sessionService.GetLoggedUser();
+        LoggedUserDTO loggedUser = _sessionService.GetLoggedUser();
         //assert
         Assert.IsNotNull(loggedUser);
         Assert.AreEqual(_user.Name, loggedUser.Name);

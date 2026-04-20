@@ -1,7 +1,7 @@
 ﻿using DataAccess;
-using DataAccess.Interfaces;
 using Domain;
 using Services.Interfaces;
+using Services.Interfaces.Repositories;
 using Services.Models;
 
 namespace Services.Tests;
@@ -21,7 +21,7 @@ public class MovieServiceTests
     {
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
-        _movieRepository = new MovieRepository(_context);
+        _movieRepository = new EFMovieRepository(_context);
         _movieService = new MovieService(_movieRepository);
         _movie = new Movie(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);
         _movieDto = new MovieDTO(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);

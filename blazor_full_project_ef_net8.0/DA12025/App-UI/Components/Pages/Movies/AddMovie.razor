@@ -4,6 +4,7 @@
 
 @inject MovieService MovieService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>Add Movie</h1>
 
@@ -46,7 +47,19 @@
 
     protected override void OnInitialized()
     {
-        movieDTO = new MovieDTO(null,"","",DateTime.Now,0);
+        movieDTO = new MovieDTO(null, "", "", DateTime.Now, 0);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnSubmit()

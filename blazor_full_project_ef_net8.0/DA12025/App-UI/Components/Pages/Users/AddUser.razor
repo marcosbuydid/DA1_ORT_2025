@@ -4,6 +4,7 @@
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>Add User</h1>
 
@@ -52,7 +53,19 @@
 
     protected override void OnInitialized()
     {
-        userDTO = new UserDTO(null,"","","","","");
+        userDTO = new UserDTO(null, "", "", "", "", "");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnSubmit()

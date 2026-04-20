@@ -1,10 +1,11 @@
-﻿@using Services
+﻿@using System.Text.Json
+@using Services.Models
 @inherits LayoutComponentBase
 
-@inject SessionService SessionService
+@inject IJSRuntime JS
 
 <div class="page">
-    @if (SessionService.GetLoggedUser() != null)
+    @if (_user != null)
     {
         <div class="sidebar">
             <NavMenu/>
@@ -26,9 +27,20 @@
 
 @code {
 
-    protected override void OnInitialized()
+    private LoggedUserDTO? _user;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        SessionService.GetLoggedUser();
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (!String.IsNullOrEmpty(json))
+        {
+            _user = JsonSerializer.Deserialize<LoggedUserDTO>(json);
+
+            StateHasChanged(); //refresh UI after loading user
+        }
     }
 
 }

@@ -1,5 +1,5 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess;
 

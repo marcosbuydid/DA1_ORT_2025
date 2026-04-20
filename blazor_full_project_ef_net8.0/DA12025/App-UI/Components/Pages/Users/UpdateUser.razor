@@ -4,6 +4,7 @@
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>Update User</h1>
 
@@ -44,6 +45,18 @@
         //user service on update leaves the same
         //password the user has
         userDTO.Password = "87654321";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     private void OnUpdate(UserDTO user)

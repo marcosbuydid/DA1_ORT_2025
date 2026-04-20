@@ -1,14 +1,14 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess;
 
-public class UserRepository : IUserRepository
+public class EFUserRepository : IUserRepository
 {
     private readonly AppDbContext _appDbContext;
 
-    public UserRepository(AppDbContext appDbContext)
+    public EFUserRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
     }

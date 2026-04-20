@@ -1,5 +1,5 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess
 {
@@ -15,9 +15,12 @@ namespace DataAccess
 
         private void LoadDefaultMovies()
         {
-            Movies.Add(new Movie(null, "Black Rain", "Ridley Scott", new DateTime(1989, 09, 22), 30000000));
-            Movies.Add(new Movie(null, "Cast Away", "Robert Zemeckis", new DateTime(2000, 12, 22), 25000000));
-            Movies.Add(new Movie(null, "Training Day", "Antoine Fuqua", new DateTime(2002, 01, 18), 10000000));
+            Movies.Add(new Movie(null, "Black Rain", "Ridley Scott",
+                new DateTime(1989, 09, 22), 30000000));
+            Movies.Add(new Movie(null, "Cast Away", "Robert Zemeckis",
+                new DateTime(2000, 12, 22), 25000000));
+            Movies.Add(new Movie(null, "Training Day", "Antoine Fuqua",
+                new DateTime(2002, 01, 18), 10000000));
         }
 
         public List<Movie> GetMovies()

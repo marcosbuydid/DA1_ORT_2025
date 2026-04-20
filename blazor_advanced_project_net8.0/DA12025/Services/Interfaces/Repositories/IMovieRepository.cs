@@ -1,6 +1,6 @@
 ﻿using Domain;
 
-namespace DataAccess.Interfaces;
+namespace Services.Interfaces.Repositories;
 
 public interface IMovieRepository
 {

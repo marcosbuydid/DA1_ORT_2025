@@ -4,7 +4,7 @@ namespace Services.Interfaces;
 
 public interface ISessionService
 {
-    UserDTO GetLoggedUser();
+    LoggedUserDTO GetLoggedUser();
     void Login(string username, string password);
     void Logout();
 }

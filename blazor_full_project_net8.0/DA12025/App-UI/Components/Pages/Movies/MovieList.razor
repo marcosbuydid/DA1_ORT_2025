@@ -5,30 +5,35 @@
 
 @inject MovieService MovieService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>Movie List</h1>
 
 <table class="table">
     <thead>
-        <tr>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Release Date</th>
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
+    <tr>
+        <th>Title</th>
+        <th>Director</th>
+        <th>Release Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var movie in movies)
-        {
-            <tr>
-                <td>@movie.Title</td>
-                <td>@movie.Director</td>
-                <td>@movie.ReleaseDate.Year/@movie.ReleaseDate.Month/@movie.ReleaseDate.Day</td>
-                <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(movie.Title)">Update</button></td>
-                <td><button type="button" class="btn btn-secondary" @onclick="() => OnDelete(movie.Title)">Delete</button></td>
-            </tr>
-        }
+    @foreach (var movie in movies)
+    {
+        <tr>
+            <td>@movie.Title</td>
+            <td>@movie.Director</td>
+            <td>@movie.ReleaseDate.Year/@movie.ReleaseDate.Month/@movie.ReleaseDate.Day</td>
+            <td>
+                <button type="button" class="btn btn-primary" @onclick="() => OnUpdate(movie.Title)">Update</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-secondary" @onclick="() => OnDelete(movie.Title)">Delete</button>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
@@ -42,6 +47,18 @@
         selectedMovieTitle = "";
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
     private void OnDelete(string title)
     {
         MovieService.DeleteMovie(title);
@@ -53,4 +70,5 @@
         selectedMovieTitle = title;
         NavigationManager.NavigateTo("/update-movie/" + selectedMovieTitle);
     }
+
 }

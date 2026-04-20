@@ -4,6 +4,7 @@
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>User List</h1>
 
@@ -27,8 +28,12 @@
             <td>@user.LastName</td>
             <td>@user.Email</td>
             <td>@user.Role</td>
-            <td><button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button></td>
-            <td><button type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)">Delete</button></td>
+            <td>
+                <button type="button" class="btn btn-primary" @onclick="() => OnUpdate(user.Email)">Update</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-secondary" @onclick="() => OnDelete(user.Email)">Delete</button>
+            </td>
         </tr>
     }
     </tbody>
@@ -45,12 +50,24 @@
         selectedUserEmail = "";
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
     private void OnDelete(string selectedUserEmail)
     {
         UserService.DeleteUser(selectedUserEmail);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
-    
+
     private void OnUpdate(string email)
     {
         selectedUserEmail = email;

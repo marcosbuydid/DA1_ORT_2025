@@ -1,23 +1,64 @@
 ﻿@page "/"
 
+@using System.Text.Json
 @using Services.Interfaces
+@using Services.Models
 
 @inject ISessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 
-@if (SessionService.GetLoggedUser() != null)
+@if (_user != null)
 {
-    <h1>Home Screen</h1>
-    <p>This is a Movie App created with Blazor</p>
-    <div>
-        <h5 class="mt-4">Welcome @SessionService.GetLoggedUser().Email</h5>
-        <div class="mt-4">
-            <button type="button" class="btn btn-primary" @onclick="OnChangePassword">Change Password</button>
-        </div>
-        <div class="mt-4">
-            <button type="button" class="btn btn-secondary" @onclick="OnLogout">Logout</button>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm border-1 rounded-4">
+                    <div class="card-body p-4 text-center">
+                        <h1 class="fw-bold mb-2">Home Screen</h1>
+                        <p class="text-muted mb-4">
+                            This is a Movie App created with Blazor
+                        </p>
+                        <div class="alert alert-light border rounded-3 mb-4  w-75 mx-auto">
+                            <h5 class="mb-1">Welcome,
+                                <span class="text-secondary fw-bold">
+                                    @_user.Name @_user.LastName
+                                </span>
+                            </h5>
+                            <div class="sm-light rounded-4 p-2 mb-4 w-100 mx-auto">
+                                <div class="mb-2">
+                                    <small class="fw-bold">Email</small>
+                                    <small>
+                                        <span class="badge  px-3 py-2 squared-pill"
+                                              style="background-color:#3f3ce8;">
+                                            @_user.Email
+                                        </span>
+                                    </small>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="fw-bold">Role</small>
+                                    <small>
+                                        <span class="badge px-3 py-2 squared-pill"
+                                              style="background-color:#3f3ce8;">
+                                            @_user.Role
+                                        </span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <button type="button" class="btn btn-primary mb-2"
+                                    @onclick="OnChangePassword">Change Password
+                            </button>
+                            <button type="button" class="btn btn-secondary px-4"
+                                    @onclick="OnLogout"> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -39,15 +80,25 @@ else
 
 @code {
 
-    protected override void OnInitialized()
+    private LoggedUserDTO? _user;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        SessionService.GetLoggedUser();
+        if (!firstRender) return;
+
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+        if (!String.IsNullOrEmpty(json))
+        {
+            _user = JsonSerializer.Deserialize<LoggedUserDTO>(json);
+            StateHasChanged(); //refresh UI after loading user
+        }
     }
 
-    private void OnLogout()
+    private async Task OnLogout()
     {
         SessionService.Logout();
-        NavigationManager.NavigateTo("/");
+        await JS.InvokeVoidAsync("localStorage.removeItem", "user");
+        NavigationManager.NavigateTo("/", forceLoad: true);
     }
 
     private void OnChangePassword()

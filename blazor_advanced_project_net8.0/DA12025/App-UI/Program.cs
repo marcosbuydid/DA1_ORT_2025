@@ -1,9 +1,7 @@
 using App_UI.Components;
 using DataAccess;
-using DataAccess.Interfaces;
+using Factory;
 using Microsoft.EntityFrameworkCore;
-using Services;
-using Services.Interfaces;
 using Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,17 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<IMovieRepository, InMemoryMovieRepository>();
-builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
-//builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ISessionService, SessionService>();
-
 builder.Services.Configure<SystemSettings>(builder.Configuration.GetSection("SystemSettings"));
-builder.Services.AddScoped<ISecureDataService, SecureDataService>();
+
+ServiceCollectionExtensions.AddServices(builder.Services);
+ServiceCollectionExtensions.AddDataAccess(builder.Services);
 
 builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection"),

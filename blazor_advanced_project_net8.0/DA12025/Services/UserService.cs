@@ -1,6 +1,6 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Services.Interfaces;
+using Services.Interfaces.Repositories;
 using Services.Models;
 
 namespace Services;

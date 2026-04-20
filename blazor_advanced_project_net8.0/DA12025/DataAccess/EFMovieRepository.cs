@@ -1,14 +1,14 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess;
 
-public class MovieRepository : IMovieRepository
+public class EFMovieRepository : IMovieRepository
 {
     private readonly AppDbContext _appDbContext;
 
-    public MovieRepository(AppDbContext appDbContext)
+    public EFMovieRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
     }
