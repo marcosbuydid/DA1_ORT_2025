@@ -4,8 +4,8 @@
 @using Services.Models
 
 @inject IMovieService MovieService
-@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>Update Movie</h1>
 
@@ -35,11 +35,16 @@
 
     protected override void OnInitialized()
     {
-        if (SessionService.GetLoggedUser() != null!)
-        {
-            movieDTO = MovieService.GetMovie(movieTitle);
-        }
-        else
+        movieDTO = MovieService.GetMovie(movieTitle);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
         {
             NavigationManager.NavigateTo("/");
         }

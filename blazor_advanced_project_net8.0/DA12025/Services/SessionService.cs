@@ -1,6 +1,6 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Services.Interfaces;
+using Services.Interfaces.Repositories;
 using Services.Models;
 
 namespace Services;
@@ -9,6 +9,7 @@ public class SessionService : ISessionService
 {
     private readonly IUserRepository _userRepository;
     private readonly ISecureDataService _secureDataService;
+    private LoggedUserDTO _loggedUserDTO;
 
     public SessionService(IUserRepository userRepository, ISecureDataService secureDataService)
     {
@@ -16,14 +17,14 @@ public class SessionService : ISessionService
         _secureDataService = secureDataService;
     }
 
-    public UserDTO GetLoggedUser()
+    public LoggedUserDTO GetLoggedUser()
     {
-        return LoggedUser.Current;
+        return _loggedUserDTO;
     }
 
     public void Login(string email, string password)
     {
-        if (LoggedUser.Current != null) return;
+        if (_loggedUserDTO != null) return;
 
         User? user = _userRepository.GetUsers()
             .FirstOrDefault(u => u.Email == email);
@@ -33,17 +34,17 @@ public class SessionService : ISessionService
             throw new ArgumentException("User or password is incorrect, try again");
         }
 
-        LoggedUser.Current = FromEntity(user);
+        _loggedUserDTO = FromEntity(user);
     }
 
     public void Logout()
     {
-        LoggedUser.Current = null;
+        _loggedUserDTO = null;
     }
 
-    private static UserDTO FromEntity(User user)
+    private static LoggedUserDTO FromEntity(User user)
     {
-        return new UserDTO()
+        return new LoggedUserDTO()
         {
             Name = user.Name,
             LastName = user.LastName,

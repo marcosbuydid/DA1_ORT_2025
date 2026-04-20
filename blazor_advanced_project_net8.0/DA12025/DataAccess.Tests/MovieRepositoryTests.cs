@@ -1,6 +1,6 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess.Tests;
 
@@ -18,7 +18,7 @@ public class MovieRepositoryTests
     {
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
-        _movieRepository = new MovieRepository(_context);
+        _movieRepository = new EFMovieRepository(_context);
         _movie = new Movie(1, "Black Rain", "Ridley Scott", new DateTime(1989, 9, 22), 30000000);
         _movie_two = new Movie(2, "Interstellar", "Cristopher Nolan", new DateTime(2014, 11, 7), 165000000);
     }

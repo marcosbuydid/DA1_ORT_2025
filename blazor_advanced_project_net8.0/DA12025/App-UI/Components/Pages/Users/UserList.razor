@@ -4,8 +4,8 @@
 @using Services.Models
 
 @inject IUserService UserService
-@inject ISessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <h1>User List</h1>
 
@@ -50,12 +50,17 @@
 
     protected override void OnInitialized()
     {
-        if (SessionService.GetLoggedUser() != null!)
-        {
-            users = UserService.GetUsers();
-            selectedUserEmail = "";
-        }
-        else
+        users = UserService.GetUsers();
+        selectedUserEmail = "";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        string json = await JS.InvokeAsync<string>("localStorage.getItem", "user");
+
+        if (String.IsNullOrEmpty(json))
         {
             NavigationManager.NavigateTo("/");
         }

@@ -1,6 +1,6 @@
-﻿using DataAccess.Interfaces;
-using Domain;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces.Repositories;
 
 namespace DataAccess.Tests;
 
@@ -18,7 +18,7 @@ public class UserRepositoryTests
     {
         _contextFactory = new InMemoryAppContextFactory();
         _context = _contextFactory.CreateDbContext();
-        _userRepository = new UserRepository(_context);
+        _userRepository = new EFUserRepository(_context);
         _user = new User(1, "Tim", "Robbins", "timrobbins@email.com", "123456", "User");
         _user_two = new User(2, "Leonardo", "Di Caprio", "dicapriol@email.com", "654321", "User");
     }
